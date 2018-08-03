@@ -1,4 +1,4 @@
-package stepdefinition;
+package stepdefinition.steps_API;
 
 import org.testng.Assert;
 
@@ -7,12 +7,12 @@ import main.CucumberRunner;
 
 public class Homepage extends CucumberRunner {
 
-	@Given("^I am on google page$")
+/*	@Given("^I am on google page$")
 	public void googlePage() throws Throwable {
 
 		String title = driver.getTitle();
 
 		Assert.assertEquals(title, "Google");
-	}
+	}*/
 
 }

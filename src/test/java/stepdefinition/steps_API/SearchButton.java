@@ -1,4 +1,4 @@
-package stepdefinition;
+package stepdefinition.steps_API;
 
 import org.openqa.selenium.By;
 
@@ -7,10 +7,10 @@ import main.CucumberRunner;
 
 public class SearchButton extends CucumberRunner {
 
-	@Then("^I click search button$")
+/*	@Then("^I click search button$")
 	public void searchButton() throws Throwable {
 		driver.findElement(By.name("btnG")).click();
 
-	}
+	}*/
 
 }

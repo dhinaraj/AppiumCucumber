@@ -1,7 +1,6 @@
 Feature: To search junit in google
 
-
-@JunitScenario
+  @JunitScenario
   Scenario: Junit Google
     Given I am on google page
     When I type "junit"

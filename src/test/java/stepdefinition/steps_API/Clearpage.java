@@ -1,4 +1,4 @@
-package stepdefinition;
+package stepdefinition.steps_API;
 
 import org.openqa.selenium.By;
 
@@ -8,11 +8,11 @@ import main.CucumberRunner;
 public class Clearpage extends CucumberRunner {
 	
 
-	@Then("^I clear search textbox$")
+/*	@Then("^I clear search textbox$")
 	public void Clear() throws Throwable {
 
 		driver.findElement(By.cssSelector("input[name='q']")).clear();
 
-	}
+	}*/
 
 }
