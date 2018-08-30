@@ -1,4 +1,4 @@
-package main;
+    package main;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,21 +24,30 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import com.vimalselvam.cucumber.listener.*;
+
+import base.config.GlobalSettings;
+import base.genericLib_Mob.MobCommonFunctions;
 import base.genericLib_Mob.MobProp;
 import cucumber.api.CucumberOptions;
+import cucumber.api.java.After;
 import cucumber.api.testng.AbstractTestNGCucumberTests;
 import hooks.TestInitializeHook;
+import io.appium.java_client.MobileCommand;
 
 @CucumberOptions(
 		strict = true,
 		monochrome = true, 
-		features = "src/test/resources/",
+		features = "src/test/resources/features/WorkTasksPro",
 		glue = "stepdefinition",
-		plugin = {"com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/report.html"})
-		//dryRun=true)//,
-		//tags={"@Regression,@JunitScenario,@TestngScenario"})
+		plugin = {"com.vimalselvam.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/report.html"},
+		//plugin = {"pretty", "html:target/cucumber-html-report"},
+		//dryRun=true)
+		tags={"@ReadyForBuild"})
 
 public class CucumberRunner extends AbstractTestNGCucumberTests {
+
+
 /*
 	public static Properties config = null;
 	//public static WebDriver driver = null;
@@ -126,8 +135,9 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 
 	TestInitializeHook mainHook = new TestInitializeHook();
 	
-	public void initializeDriver(int retryCount)
+	public boolean initializeDriver(int retryCount)
 	{
+
 		boolean isDriverInitialized = false;
 		for (int i = 0; i <= retryCount; i++) {
 
@@ -147,15 +157,16 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 			
 			if(isDriverInitialized)
 			{
-				TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
+				System.out.println("Driver intializaion Attempt :  " + i + "Sucessful");
 				break;
 			}
 			else
 			{
 				System.out.println("Driver intializaion Attempt :  " + i + "Failed");
 			}
-
 		}
+
+		return isDriverInitialized;
 	}
 	
 	
@@ -168,14 +179,28 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 
 	@BeforeSuite(alwaysRun = true)
 	public void setUp() throws Exception {
+		
+
 		mainHook.InitializeSettings();
 
 	}
 	
 	@BeforeClass(alwaysRun = true)
 	public void initializeMobileAppBeforeClass() throws IOException {
+
+
+
 		
-		initializeDriver(3);
+		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
+		{
+			boolean isDriverInitialized = initializeDriver(3);
+				if(isDriverInitialized)
+				{
+				TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
+				}
+		}
+		
+
 		
 	}	
 	
@@ -183,29 +208,47 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 	@BeforeMethod(alwaysRun = true)
 	public void initializeMobileAppBeforeMethod() throws IOException {
 
-		if(MobProp.getMobDriver()==null )
-		{
-			initializeDriver(3);
-		}
-		else if(MobProp.getMobDriver().getSessionId()==null) {
-			TestInitializeHook.quitDriver(MobProp.getMobDriver());
-			initializeDriver(3);
-			
-		}
-		
-	}
+		if (GlobalSettings.getGenrateStepsSkeleton().equals("false")) {
+			if (MobProp.getMobDriver() == null) {
+				boolean isDriverInitialized = initializeDriver(3);
+				if (isDriverInitialized) {
+					TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
+				}
+			} else if (MobProp.getMobDriver().getSessionId() == null) {
+				TestInitializeHook.quitDriver(MobProp.getMobDriver());
+				boolean isDriverInitialized = initializeDriver(3);
+				if (isDriverInitialized) {
+					TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
+				}
 
+			}
+			TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
+		}
+
+	}
 
 	@AfterClass(alwaysRun = true)
 	public void quitMobileAppAndtakeScreenshot() throws IOException {
+		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
+		{
 		File scrFile = ((TakesScreenshot) MobProp.getMobDriver()).getScreenshotAs(OutputType.FILE);
 		FileUtils.copyFile(scrFile, new File(System.getProperty("user.dir") + "//screenshots/screenshot.png"));
+		
+	
+		Reporter.loadXMLConfig(new File("src/test/resources/config/extent-config.xml"));
+        Reporter.setSystemInfo("user", System.getProperty("user.name"));
+        Reporter.setSystemInfo("os", "Mac OSX");
+        Reporter.setTestRunnerOutput("Sample test runner output message");
+		
 		TestInitializeHook.quitDriver(MobProp.getMobDriver());
+		}
 
 	}
 
 	@AfterMethod(alwaysRun = true)
 	public void tearDownr(ITestResult result) throws IOException {
+		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
+		{
 		if (result.isSuccess()) {
 			File imageFile = ((TakesScreenshot) MobProp.getMobDriver()).getScreenshotAs(OutputType.FILE);
 			String failureImageFileName = result.getMethod().getMethodName()
@@ -213,11 +256,12 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 			File failureImageFile = new File(System.getProperty("user.dir") + "//screenshots//" + failureImageFileName);
 			FileUtils.copyFile(imageFile, failureImageFile);
 		}
+		}
 
 	}
 
-	@AfterSuite(alwaysRun = true)
-	public void quit() throws IOException, InterruptedException {
- 
-	}
+
+
+
 }
+

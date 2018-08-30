@@ -36,6 +36,8 @@ public class GlobalSettings {
 	private static int implcitTimeOutMax ;
 	
 	private static String extentReportConfig;
+	
+	private static String GenrateStepsSkeleton;
     
     
 
@@ -181,6 +183,14 @@ public class GlobalSettings {
 
 	public static void setExtentReportConfig(String extentRepConfig) {
 		extentReportConfig = extentRepConfig;
+	}
+
+	public static String getGenrateStepsSkeleton() {
+		return GenrateStepsSkeleton;
+	}
+
+	public static void setGenrateStepsSkeleton(String genrateStepsSkeleton) {
+		GenrateStepsSkeleton = genrateStepsSkeleton;
 	}  
     
     

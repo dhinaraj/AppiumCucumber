@@ -56,8 +56,8 @@ public class ConfigReader {
 
 
          GlobalSettings.setMobilePlatformToRunTest(config.getProperty("MobilePlatformToRunTest"));
-         GlobalSettings.setAndroidMobileAppPath(workingDir + "\\Base\\GenericLib_Mobile\\MobileAppFiles\\" +config.getProperty("AndroidAPK") );
-         GlobalSettings.setIOSMobileAppPath(workingDir + "\\Base\\GenericLib_Mobile\\MobileAppFiles\\" + config.getProperty("IosApp"));
+         GlobalSettings.setAndroidMobileAppPath("C:\\Users\\sesa473389\\Source\\Repos\\AppiumCucumber\\src\\test\\java\\base\\dataFiles\\" +config.getProperty("AndroidAPK") );
+         GlobalSettings.setIOSMobileAppPath(workingDir + "\\base\\dataFiles\\" + config.getProperty("IosApp"));
 
          GlobalSettings.setDeviceName(config.getProperty("DeviceName"));
 
@@ -65,6 +65,8 @@ public class ConfigReader {
 
          GlobalSettings.setImplcitTimeOutMin(Integer.parseInt(config.getProperty("setImplcitTimeOutMin")));
          GlobalSettings.setImplcitTimeOutMax(Integer.parseInt(config.getProperty("setImplcitTimeOutMax")));
+         
+         GlobalSettings.setGenrateStepsSkeleton(config.getProperty("GenrateStepsSkeleton"));
     	 
 
      }

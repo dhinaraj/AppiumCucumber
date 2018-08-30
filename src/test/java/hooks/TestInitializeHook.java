@@ -322,10 +322,11 @@ public class TestInitializeHook {
                 AndroidCapabilities.setCapability("deviceName", GlobalSettings.getDeviceName());
                 AndroidCapabilities.setCapability("platformName", "Android");
                 AndroidCapabilities.setCapability("platformVersion", "8.0");
-                AndroidCapabilities.setCapability("appPackage", "com.schneiderelectric.worktaskspro");
+                //AndroidCapabilities.setCapability("appPackage", "com.schneiderelectric.worktaskspro");
                 AndroidCapabilities.setCapability("fullReset", false);
-                AndroidCapabilities.setCapability("noReset", true);
-                AndroidCapabilities.setCapability("appActivity", "md5ecbd7707d85d05718ebd3878aa5c9af9.SplashActivity");
+                AndroidCapabilities.setCapability("noReset", true);            
+                AndroidCapabilities.setCapability("app", GlobalSettings.getAndroidMobileAppPath());
+                //AndroidCapabilities.setCapability("appActivity", "md5ecbd7707d85d05718ebd3878aa5c9af9.SplashActivity");
                 //AndroidCapabilities.setCapability("autoAcceptAlerts", true);
                 AndroidCapabilities.setCapability("unicodeKeyboard", true);
                 //AndroidCapabilities.setCapability("resetkeyboard", true);

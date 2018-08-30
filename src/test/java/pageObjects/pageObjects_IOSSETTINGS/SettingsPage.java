@@ -2,8 +2,9 @@ package pageObjects.pageObjects_IOSSETTINGS;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import pageObjects.pageObjects_WTA.WTAPageObject;
 
-public class SettingsPage {
+public class SettingsPage extends WTAPageObject {
 
 	@iOSFindBy(xpath = "(//XCUIElementTypeButton[@name=\"More Info\"])[8]")
 	public MobileElement btn_GeneralSettings;
