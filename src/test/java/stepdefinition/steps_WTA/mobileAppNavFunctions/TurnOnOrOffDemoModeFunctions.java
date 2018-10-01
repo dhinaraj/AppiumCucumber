@@ -1,9 +1,9 @@
-package hooks.mobileAppHooks;
+package stepdefinition.steps_WTA.mobileAppNavFunctions;
 
 import base.genericLib_Mob.MobCommonFunctions;
 import pageObjects.pageObjects_WTA.app_Pages.Account_Settings_Page;
 
-public class TurnOnOrOffDemoModeHook {
+public class TurnOnOrOffDemoModeFunctions {
 	
 	MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
 	Account_Settings_Page Account_Settings_Page = new Account_Settings_Page();

@@ -2,23 +2,39 @@ package stepdefinition.steps_WTA.localizationNavSteps;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.Assert;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
+import base.genericLib_Mob.MobProp;
 import base.genericLib_Mob.MobileAppiumFunctions;
 import base.helpers.excelHelpers.ExcelHelper;
+import cucumber.api.Scenario;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import main.CucumberHelperTestSteps;
+import main.CucumberRunner;
 import pageObjects.pageObjects_WTA.app_Pages.*;
 import pageObjects.pageObjects_WTA.localization_Pages.Loc_Account_Settings_Page;
 
+import com.google.common.io.Files;
 import com.vimalselvam.cucumber.listener.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 
 public class LocalizationTestSteps {
 	
-
-
+	
 	private static String baseDirectory = "C:\\Users\\sesa473389\\Source\\Repos\\AppiumCucumber\\src\\test\\java\\base\\dataFiles\\";
 
     private String LocalizationDataSourceFile = baseDirectory+ "Localization.xlsx";
@@ -46,16 +62,12 @@ public class LocalizationTestSteps {
     OverFlowIcon_Page OverFlowIcon_Page = new OverFlowIcon_Page();
     SentItems_Page SentItems_Page = new SentItems_Page();
 
-/*   @Then("^^Validate the Localization key on Account Settings Page for 'Demo Mode', 'Server Path','Repository', 'Provider', 'User Name', 'Password', 'Show Password', 'Logon'$")
-    public void validate_the_Localization_key_on_Account_Settings_Page_for_Demo_Mode_Server_Path_Repository_Provider_User_Name_Password_Show_Password_Logon() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }*/
     
-    @Then("^^Validate the Localization key on Account Settings Page for '(.*)', '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
+    @Then("^Validate the Localization key on Account Settings Page for '(.*)', '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenThernValidateTheLocalizationKeyOnAccountSettingsPageFor(String DemoMode, String ServerPath, String Repository, String Provider, String UserName, String Password, String ShowPassword, String Logon) throws Throwable
-    {
-       
+    {  
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
     	
     	Map<String, String> DemoModeDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DemoMode);
         Map<String, String> ServerPathDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", ServerPath);
@@ -99,36 +111,12 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Password + "TranslatedString", Loc_Account_Settings_Page.txt_Password.get(2).getText());
             ActualTranslatedStrings.put(ShowPassword + "TranslatedString", Loc_Account_Settings_Page.chk_ShowPassword.getText());
             ActualTranslatedStrings.put(Logon + "TranslatedString", Loc_Account_Settings_Page.btn_LogOn.getText());
+            
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
-
-            for ( String key2 : ExpectedTranslatedStrings.keySet() ) {
-
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-                
-                
-
-                if (ExpectedString.equals(ActualString))
-                {
-                	
-                	Reporter.addStepLog("Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
-
-
-                }
-                else
-                {
-
-                	Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
+            OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         }
+            Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
 
-        //Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
         
 
@@ -137,6 +125,9 @@ public class LocalizationTestSteps {
     public void GivenValidateTheLocalizationKeyOnAccountSettingsPage_ExistingConfigurationFor(String ServerPath, String Repository, String Provider, String UserName, String Password, String ShowPassword) throws Exception
     {
 
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> ServerPathDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", ServerPath);
         Map<String, String> RepositoryDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Repository);
         Map<String, String> ProviderDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Provider);
@@ -179,32 +170,10 @@ public class LocalizationTestSteps {
 
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
-
-            for ( String key2 : ExpectedTranslatedStrings.keySet() ) {
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-                
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         }
-
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
-    }
+            Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
+        
    }
 
 
@@ -213,6 +182,9 @@ public class LocalizationTestSteps {
     @Given("Validate the Localization key on Menu Navigation page for '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnMenuNavigationPageFor(String Inbox, String FillForm, String Drafts, String SentItems, String Outbox, String Sync, String ManageAccount, String Settings, String Help, String LogOff) throws Exception
     {
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> InboxDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "MenuNav", Inbox);
         Map<String, String> FillFormDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "MenuNav", FillForm);
         Map<String, String> DraftsDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "MenuNav", Drafts);
@@ -265,36 +237,21 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(LogOff + "TranslatedString", MenuNav_Page.btn_LogOff.getText());
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
+   
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() ) 
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Given("Validate the Localization key on Work Item Category Fiter for '(.*)','(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnOnWorkItemCategoryFiter(String AllItems, String Approval, String Flagged, String Information, String InvokeFormItem) throws Exception
     {
-
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> AllItemsDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItemFilter", AllItems);
         Map<String, String> ApprovalDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItemFilter", Approval);
         Map<String, String> FlaggedDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItemFilter", Flagged);
@@ -334,35 +291,23 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(InvokeFormItem + "TranslatedString", MenuNav_Page.btn_InvokeForm.getText());
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+   
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Given("Validate the Localization key on About Page for '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnAboutPageFor(String About, String AppName, String Version, String Copyright, String PrivacyPolicy, String ViewOnline, String TechnicalSupport, String ContactUs) throws Exception
     {
+    	
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> AboutDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", About);
         Map<String, String> AppNameDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", AppName);
         Map<String, String> VersionDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Version);
@@ -416,35 +361,22 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(ContactUs + "TranslatedString", About_Page.txt_Contact.getText());
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Given("Validate the Localization key on Manage Account Overflow Icon for '(.*)' , '(.*)', '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnManageAccountOverflowIconFor(String DeleteAccount, String Help, String About) throws Exception
     {
+    	
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> DeleteAccountDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DeleteAccount);
         Map<String, String> HelpDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Help);
         Map<String, String> AboutDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", About);
@@ -483,35 +415,21 @@ public class LocalizationTestSteps {
 
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Given("Validate the Localization key on clear account settings Warning for '(.*)' , '(.*)', '(.*)', '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnDeleteAccountWarningFor(String DeleteAccount, String DeleteAccountWarning, String OK, String Cancel) throws Exception
     {
+    	
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> DeleteAccountDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DeleteAccount);
         Map<String, String> DeleteAccountWarningDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DeleteAccountWarning);
         Map<String, String> OKDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", OK);
@@ -556,36 +474,23 @@ public class LocalizationTestSteps {
 
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Given("Validate the Localization key on App Settings Page for '(.*)', '(.*)' , '(.*)' , '(.*)' , '(.*)' '(.*)', '(.*)', '(.*)', '(.*)' '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnAppSettingsPageFor(String SettingsText, String LoggingListButton, String SyncListButton, String LoggingText, String SyncText, String Level, String Error, String Warning, String Information, String ItemsToSyncDataAndLookUp) throws Exception
     {
-        Map<String, String> SettingsTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", SettingsText);
+        
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> SettingsTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", SettingsText);
         Map<String, String> LoggingListButtonDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", LoggingListButton);
         Map<String, String> SyncListButtonDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", SyncListButton);
         Map<String, String> LoggingTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", LoggingText);
@@ -654,35 +559,21 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(SyncText + "TranslatedString", AppSettings_Page.txt_Sync.getText());
             ActualTranslatedStrings.put(ItemsToSyncDataAndLookUp + "TranslatedString", AppSettings_Page.txt_ItemsToSyncForLookupAndData.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Then("^Validate the Localization key on Approval Work Item Page for '(.*)', '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnApprovalWorkItemPageFor(String Approve, String Reject, String CommentPlaceholder, String ApproveConfirmMessage, String ApproveSuccessMessage, String RejectConfirmMessage, String RejectSuccessMessage) throws Exception
     {
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> ApproveDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", Approve);
         Map<String, String> RejectDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", Reject);
         Map<String, String> CommentPlaceholderDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", CommentPlaceholder);
@@ -751,29 +642,12 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(RejectSuccessMessage + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
+     
+   
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
-
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
@@ -781,6 +655,9 @@ public class LocalizationTestSteps {
     public void ThenValidateTheLocalizationKeyOnRemoveWorkItemPageFor(String HoursAgo, String MinutesAgo, String OneHourAgo, String Remove) throws Exception
     {
 
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
         Map<String, String> HoursAgoDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", HoursAgo);
         Map<String, String> MinutesAgoDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", MinutesAgo);
         Map<String, String> OneHourAgoDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", OneHourAgo);
@@ -823,35 +700,20 @@ public class LocalizationTestSteps {
 
             ActualTranslatedStrings.put(Remove + "TranslatedString", InformationWorkItemPage.btn_Remove.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^Validate the Localization key for no item available messages '(.*)' , '(.*)', '(.*)', '(.*)'$")
     public void ThenValidateTheLocalizationKeyForNoItemAvailableMessages( String Outbox_List_NoItemsAvailable, String SentItems_List_NoItemsAvailable, String WorkItem_List_NoItemsAvailable, String Drafts_List_NoItemsAvailable) throws Exception
     {
-        Map<String, String> WorkItem_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", WorkItem_List_NoItemsAvailable);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> WorkItem_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", WorkItem_List_NoItemsAvailable);
         Map<String, String> Drafts_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Drafts", Drafts_List_NoItemsAvailable);
         Map<String, String> Outbox_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Outbox", Outbox_List_NoItemsAvailable);
         Map<String, String> SentItems_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "SentItems", SentItems_List_NoItemsAvailable);
@@ -893,36 +755,21 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(SentItems_List_NoItemsAvailable + "TranslatedString", SentItems_Page.txt_NoItemsAvailable.getText());
 
 
+   
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
-
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^Validate the Localization key on fill forms page for '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnFillFormsPageFor(String FillForm_SaveAsDraft_Success, String FillForm_Submission_Success) throws Exception
     {
-        Map<String, String> FillForm_SaveAsDraft_SuccessDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "FillForms", FillForm_SaveAsDraft_Success);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> FillForm_SaveAsDraft_SuccessDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "FillForms", FillForm_SaveAsDraft_Success);
         Map<String, String> FillForm_Submission_SuccessDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "FillForms", FillForm_Submission_Success);
         
 
@@ -958,35 +805,23 @@ public class LocalizationTestSteps {
             FillForm_Page.EnterFormInput("TestName", "TestEmailgmail.com", "11/11/2001");
             ActualTranslatedStrings.put(FillForm_Submission_Success + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+   
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
+    
     }
 
     @Then("^Validate the Localization key on Drafts page for '(.*)' , '(.*)' , '(.*)', '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnDraftsPageFor(String ClearAll, String ClearAllErrorTitle, String ClearAll_ConfirmMessage, String DeleteSelectedItems, String DeleteSelectedItems_ConfirmMessage) throws Exception
     {
-        Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
         Map<String, String> ClearAllErrorTitleDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAllErrorTitle);
         Map<String, String> ClearAll_ConfirmMessageDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll_ConfirmMessage);
         Map<String, String> DeleteSelectedItemsDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", DeleteSelectedItems);
@@ -1045,35 +880,21 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^Validate the Localization key on sent items page for '(.*)' , '(.*)' , '(.*)', '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnSentItemsPageFor(String ClearAll, String ClearAllErrorTitle, String ClearAll_ConfirmMessage, String DeleteSelectedItems, String DeleteSelectedItems_ConfirmMessage) throws Exception
     {
-        Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
         Map<String, String> ClearAllErrorTitleDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAllErrorTitle);
         Map<String, String> ClearAll_ConfirmMessageDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll_ConfirmMessage);
         Map<String, String> DeleteSelectedItemsDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", DeleteSelectedItems);
@@ -1129,35 +950,21 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^Validate the Localization key on outbox page for '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnOutboxPageFor(String ClearAll, String ClearAllErrorTitle, String ClearAll_ConfirmMessage, String DeleteSelectedItems, String DeleteSelectedItems_ConfirmMessage, String Outbox_List_SubHeader_FillForms, String Outbox_List_SubHeader_WorkItems) throws Exception
     {
-        Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
         Map<String, String> ClearAllErrorTitleDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAllErrorTitle);
         Map<String, String> ClearAll_ConfirmMessageDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll_ConfirmMessage);
         Map<String, String> DeleteSelectedItemsDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", DeleteSelectedItems);
@@ -1243,35 +1050,21 @@ public class LocalizationTestSteps {
 
             Dialogs_Page.btn_Cancel.click();
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^Validate the Localization key on work items page for '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnWorkItemsPageFor(String NoSubject, String LoadMore, String SecondsAgo) throws Exception
     {
-        Map<String, String> WorkItem_List_NoSubjectDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", NoSubject);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> WorkItem_List_NoSubjectDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", NoSubject);
         Map<String, String> LoadMoreDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", LoadMore);
         Map<String, String> SecondsAgoDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", SecondsAgo);
        
@@ -1329,36 +1122,22 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(NoSubject + "TranslatedString", FirstWorkItemTitle);
             ActualTranslatedStrings.put(LoadMore + "TranslatedString", Inbox_Page.btn_LoadMore.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Then("^Validate the Localization key on login page for '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnLoginPageFor(String UserName, String Password, String ShowPassword, String Logon, String Error_114, String ModalDialog_TitleError) throws Exception
     {
-        Map<String, String> UserNameDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", UserName);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> UserNameDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", UserName);
         Map<String, String> PasswordDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Password);
         Map<String, String> ShowPasswordDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", ShowPassword);
         Map<String, String> LogonDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Logon);
@@ -1406,35 +1185,21 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Error_114 + "TranslatedString", LogOff_In_Page.text_LoginPage_DialogError.getText());
             ActualTranslatedStrings.put(ModalDialog_TitleError + "TranslatedString", LogOff_In_Page.text_LoginPage_DialogTitle.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+   
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
-
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^Validate the Localization key when network connection is not available for '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyWhenNetworkConnectionIsNotAvailableFor(String FillForm_Submission_Queued, String Error_Outbox_CannotViewIfAccountOnline, String Error_NoInternetConnectivity, String Error_0) throws Exception
     {
-        Map<String, String> Error_NoInternetConnectivityDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_NoInternetConnectivity);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> Error_NoInternetConnectivityDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_NoInternetConnectivity);
         Map<String, String> Error_0Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_0);
         Map<String, String> FillForm_Submission_QueuedDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "FillForms", FillForm_Submission_Queued);
         Map<String, String> Error_Outbox_CannotViewIfAccountOnlineDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_Outbox_CannotViewIfAccountOnline);
@@ -1497,37 +1262,22 @@ public class LocalizationTestSteps {
             sleep(500);
             ActualTranslatedStrings.put(Error_Outbox_CannotViewIfAccountOnline + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.SwitchToOnlineMode();
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^^Validate the Localization key for errors from Manage Account Settings Page for '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyForErrorsFromManageAccountSettingsPageFor(String Error_99, String Error_100, String Error_130) throws Exception
     {
-        Map<String, String> Error_99Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_99);
+        
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> Error_99Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_99);
         Map<String, String> Error_100Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_100);
         Map<String, String> Error_130Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_130);
 
@@ -1582,35 +1332,20 @@ public class LocalizationTestSteps {
 
 
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
+  
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
-
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
     @Then("^^Validate the Localization key on Eula Page for '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnEulaPageFor(String Eula_Accept, String Eula_Cancel) throws Exception
     {
-        Map<String, String> Eula_AcceptDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Eula", Eula_Accept);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> Eula_AcceptDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Eula", Eula_Accept);
         Map<String, String> Eula_CancelDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Eula", Eula_Cancel);
    
 
@@ -1640,36 +1375,22 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Eula_Accept + "TranslatedString", Eula_Page.btn_Eula_Accept.getText());
             ActualTranslatedStrings.put(Eula_Cancel + "TranslatedString", Eula_Page.btn_Eula_Cancel.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some expected Strings were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
 
     @Then("^Validate the Localization key on login for '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnLoginFor(String Error_142, String Error_141, String QRCodeScannerMessage) throws Exception
     {
-        Map<String, String> Error_142Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_142);
+    	PrintWriter writer  = getFileWriter();
+    	String fileName = getTextFileName();
+    	
+    	Map<String, String> Error_142Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_142);
         //Map<String, String> Error_141Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_141);
         Map<String, String> QRCodeScannerMessageDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", QRCodeScannerMessage);
 
@@ -1710,31 +1431,14 @@ public class LocalizationTestSteps {
 
             //ActualTranslatedStrings.put(Error_141 + "TranslatedString", Account_Settings_Page.txt_AlertDialog_Msg.getText());
 
-            Reporter.addStepLog("Checking Translation For: " + Language);
+  
+   
+             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
-            for ( String key2 : ExpectedTranslatedStrings.keySet() )
-            {
-                String ExpectedString = ExpectedTranslatedStrings.get(key2);
-                String ActualString = ActualTranslatedStrings.get(key2);
-
-                if (ExpectedString.equals(ActualString))
-                {
-                    Reporter.addStepLog("Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                }
-                else
-                {
-                    Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " + "Expected String: " + ExpectedString.getBytes("UTF-8") + "-----" + "Actual String: " + ActualString.getBytes("UTF-8"));
-                    OverAllTestResult = false;
-                }
-
-            }
-
-            MobCommonFunctions.CloseApp();
         }
 
-        Assert.assertEquals(OverAllTestResult , true, "Test Failed as some textss were not matching, please check report");
+        Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
-
 
     public void sleep(int milliSeconds)
     {
@@ -1745,5 +1449,63 @@ public class LocalizationTestSteps {
 			e.printStackTrace();
 		}
     }
+    
+    
+    private boolean compareExpectedAndActualStrings(Map<String, String> ExpectedTranslatedStrings, Map<String, String> ActualTranslatedStrings, String Language, PrintWriter writer, String fileName) throws IOException
+    {
+    	boolean OverAllTestResult = true;
+    	
+    	
+		writer.println("Checking Translation For: " + Language);
+		
+        for ( String key2 : ExpectedTranslatedStrings.keySet() ) {
+
+            String ExpectedString = ExpectedTranslatedStrings.get(key2);
+            String ActualString = ActualTranslatedStrings.get(key2);
+
+            if (ExpectedString.equals(ActualString))
+            {
+            	
+            	//Reporter.addStepLog("Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
+            	writer.println("Passed --- " + "Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
+
+
+            }
+            else
+            {
+
+            	//Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
+            	writer.println("Failed --- " + "Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
+                OverAllTestResult = false;
+            }
+
+        }
+        
+        
+        writer.close();
+        
+        
+        Reporter.addScreenCaptureFromPath("../" + CucumberRunner.cucumberRelativeReportPath +"/screenshots/" + fileName);
+
+		return OverAllTestResult;
+    	
+    }
+    
+    private String getTextFileName()
+    {
+    	 String fileName = CucumberHelperTestSteps.scenario.getName().replaceAll("\\s", "_")+".txt";
+    	 return fileName;
+    }
+    
+    private PrintWriter getFileWriter() throws FileNotFoundException, UnsupportedEncodingException
+    {
+    	
+    	String destinationPath  = CucumberRunner.cucumberAbsoluteReportPath + "/screenshots/" + getTextFileName();
+    	PrintWriter writer = new PrintWriter(destinationPath , "UTF-8");
+
+    	return writer;
+    }
+    
+
 
 }

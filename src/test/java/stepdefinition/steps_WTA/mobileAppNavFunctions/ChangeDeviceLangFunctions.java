@@ -1,8 +1,8 @@
-package hooks.mobileAppHooks;
+package stepdefinition.steps_WTA.mobileAppNavFunctions;
 
 import base.genericLib_Mob.MobCommonFunctions;
 
-public class ChangeDeviceLangHook {
+public class ChangeDeviceLangFunctions {
 	
 	MobCommonFunctions MobCommonFunctions =  new MobCommonFunctions();
 	

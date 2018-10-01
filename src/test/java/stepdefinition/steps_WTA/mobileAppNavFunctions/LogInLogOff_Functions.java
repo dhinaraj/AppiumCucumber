@@ -1,11 +1,11 @@
-package hooks.mobileAppHooks;
+package stepdefinition.steps_WTA.mobileAppNavFunctions;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
 import base.genericLib_Mob.MobileAppiumFunctions;
 import pageObjects.pageObjects_WTA.app_Pages.*;
 
-public class LogInLogOff_Hook {
+public class LogInLogOff_Functions {
 	
 	MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
 	LogOff_In_Page LogOff_In_Page = new LogOff_In_Page();

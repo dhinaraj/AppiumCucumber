@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -24,28 +25,36 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import com.google.common.io.Files;
 import com.vimalselvam.cucumber.listener.*;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
 import base.genericLib_Mob.MobProp;
 import cucumber.api.CucumberOptions;
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.testng.AbstractTestNGCucumberTests;
 import hooks.TestInitializeHook;
 import io.appium.java_client.MobileCommand;
+
 
 @CucumberOptions(
 		strict = true,
 		monochrome = true, 
 		features = "src/test/resources/features/WorkTasksPro",
 		glue = "stepdefinition",
-		plugin = {"com.vimalselvam.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/report.html"},
+		//plugin = {"com.vimalselvam.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/report.html"},
+		plugin = {"com.vimalselvam.cucumber.listener.ExtentCucumberFormatter:"},
 		//plugin = {"pretty", "html:target/cucumber-html-report"},
 		//dryRun=true)
 		tags={"@ReadyForBuild"})
 
 public class CucumberRunner extends AbstractTestNGCucumberTests {
+	
+	public static String cucumberRelativeReportPath;
+	public static String cucumberAbsoluteReportPath;
 
 
 /*
@@ -182,15 +191,18 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 		
 
 		mainHook.InitializeSettings();
+		DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyy_HH_mm_ss");
+		 Date date = new Date();
+		String strDate = dateFormat.format(date);
+		cucumberRelativeReportPath = "cucumber-reports"+strDate;
+		cucumberAbsoluteReportPath = System.getProperty("user.dir") + "/target/" + cucumberRelativeReportPath;
+		new File(cucumberAbsoluteReportPath +"/screenshots").mkdirs();
 
 	}
 	
 	@BeforeClass(alwaysRun = true)
 	public void initializeMobileAppBeforeClass() throws IOException {
 
-
-
-		
 		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
 		{
 			boolean isDriverInitialized = initializeDriver(3);
@@ -198,6 +210,10 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 				{
 				TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
 				}
+				
+				
+				ExtentProperties extentProperties = ExtentProperties.INSTANCE;
+		        extentProperties.setReportPath(cucumberAbsoluteReportPath+"/report.html");
 		}
 		
 
@@ -231,10 +247,6 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 	public void quitMobileAppAndtakeScreenshot() throws IOException {
 		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
 		{
-		File scrFile = ((TakesScreenshot) MobProp.getMobDriver()).getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(scrFile, new File(System.getProperty("user.dir") + "//screenshots/screenshot.png"));
-		
-	
 		Reporter.loadXMLConfig(new File("src/test/resources/config/extent-config.xml"));
         Reporter.setSystemInfo("user", System.getProperty("user.name"));
         Reporter.setSystemInfo("os", "Mac OSX");
@@ -249,19 +261,12 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 	public void tearDownr(ITestResult result) throws IOException {
 		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
 		{
-		if (result.isSuccess()) {
-			File imageFile = ((TakesScreenshot) MobProp.getMobDriver()).getScreenshotAs(OutputType.FILE);
-			String failureImageFileName = result.getMethod().getMethodName()
-					+ new SimpleDateFormat("MM-dd-yyyy_HH-ss").format(new GregorianCalendar().getTime()) + ".png";
-			File failureImageFile = new File(System.getProperty("user.dir") + "//screenshots//" + failureImageFileName);
-			FileUtils.copyFile(imageFile, failureImageFile);
-		}
+			MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
+            MobCommonFunctions.CloseApp();
 		}
 
 	}
-
-
-
+	
 
 }
 

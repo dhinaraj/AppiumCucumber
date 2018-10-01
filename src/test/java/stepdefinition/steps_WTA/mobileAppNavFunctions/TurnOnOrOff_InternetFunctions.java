@@ -1,8 +1,8 @@
-package hooks.mobileAppHooks;
+package stepdefinition.steps_WTA.mobileAppNavFunctions;
 
 import base.genericLib_Mob.MobCommonFunctions;
 
-public class TurnOnOrOff_InternetHook {
+public class TurnOnOrOff_InternetFunctions {
 	
 	MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
 	

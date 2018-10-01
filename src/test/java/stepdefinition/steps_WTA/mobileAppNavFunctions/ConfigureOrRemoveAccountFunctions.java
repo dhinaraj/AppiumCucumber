@@ -1,10 +1,10 @@
-package hooks.mobileAppHooks;
+package stepdefinition.steps_WTA.mobileAppNavFunctions;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
 import pageObjects.pageObjects_WTA.app_Pages.*;
 
-public class ConfigureOrRemoveAccountHook {
+public class ConfigureOrRemoveAccountFunctions {
 
 	MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
 	Account_Settings_Page Account_Settings_Page = new Account_Settings_Page();
