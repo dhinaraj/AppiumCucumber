@@ -56,7 +56,7 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 	public static String cucumberRelativeReportPath;
 	public static String cucumberAbsoluteReportPath;
 
-
+	 MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
 /*
 	public static Properties config = null;
 	//public static WebDriver driver = null;
@@ -188,7 +188,6 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 
 	@BeforeSuite(alwaysRun = true)
 	public void setUp() throws Exception {
-		
 
 		mainHook.InitializeSettings();
 		DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyy_HH_mm_ss");
@@ -202,21 +201,27 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 	
 	@BeforeClass(alwaysRun = true)
 	public void initializeMobileAppBeforeClass() throws IOException {
-
+		
+		if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+		{
+			//MobCommonFunctions.RunCmdCommand("adb uninstall com.schneiderelectric.worktaskspro");
+			MobCommonFunctions.changeDeviceLanguage("en", "US");
+		}
+		
 		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
 		{
-			boolean isDriverInitialized = initializeDriver(3);
+
+				boolean isDriverInitialized = initializeDriver(3);
 				if(isDriverInitialized)
 				{
 				TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
 				}
-				
-				
+
 				ExtentProperties extentProperties = ExtentProperties.INSTANCE;
 		        extentProperties.setReportPath(cucumberAbsoluteReportPath+"/report.html");
+
 		}
 		
-
 		
 	}	
 	
@@ -225,6 +230,7 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 	public void initializeMobileAppBeforeMethod() throws IOException {
 
 		if (GlobalSettings.getGenrateStepsSkeleton().equals("false")) {
+			
 			if (MobProp.getMobDriver() == null) {
 				boolean isDriverInitialized = initializeDriver(3);
 				if (isDriverInitialized) {
@@ -242,27 +248,33 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 		}
 
 	}
+	
 
 	@AfterClass(alwaysRun = true)
 	public void quitMobileAppAndtakeScreenshot() throws IOException {
 		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
 		{
+		if (MobProp.getMobDriver() != null) {
+		TestInitializeHook.quitDriver(MobProp.getMobDriver());
+        }
+		}
+	}
+	
+	
+
+	
+	
+	@AfterSuite(alwaysRun = true)
+	public void tearDown() throws Exception {
+		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
+		{
 		Reporter.loadXMLConfig(new File("src/test/resources/config/extent-config.xml"));
         Reporter.setSystemInfo("user", System.getProperty("user.name"));
         Reporter.setSystemInfo("os", "Mac OSX");
-        Reporter.setTestRunnerOutput("Sample test runner output message");
-		
-		TestInitializeHook.quitDriver(MobProp.getMobDriver());
-		}
-
-	}
-
-	@AfterMethod(alwaysRun = true)
-	public void tearDownr(ITestResult result) throws IOException {
-		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
-		{
-			MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
-            MobCommonFunctions.CloseApp();
+        Reporter.setTestRunnerOutput("WorkTasksPro UI Test Report");
+        if (MobProp.getMobDriver() != null) {
+        	TestInitializeHook.quitDriver(MobProp.getMobDriver());
+        }
 		}
 
 	}

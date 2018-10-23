@@ -34,10 +34,7 @@ import java.io.IOException;
 
 public class LocalizationTestSteps {
 	
-	
-	private static String baseDirectory = "C:\\Users\\sesa473389\\Source\\Repos\\AppiumCucumber\\src\\test\\java\\base\\dataFiles\\";
-
-    private String LocalizationDataSourceFile = baseDirectory+ "Localization.xlsx";
+    private String LocalizationDataSourceFile = 	System.getProperty("user.dir") + "/src/test/java/base/dataFiles/" + "Localization.xlsx";
    
     
     MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
@@ -66,8 +63,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on Account Settings Page for '(.*)', '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenThernValidateTheLocalizationKeyOnAccountSettingsPageFor(String DemoMode, String ServerPath, String Repository, String Provider, String UserName, String Password, String ShowPassword, String Logon) throws Throwable
     {  
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> DemoModeDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DemoMode);
         Map<String, String> ServerPathDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", ServerPath);
@@ -81,9 +77,15 @@ public class LocalizationTestSteps {
         boolean OverAllTestResult = true;
         
         for ( String key : DemoModeDic.keySet() ) {
+        	
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	DemoModeDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
+        	
+        	
         	Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(DemoMode + "TranslatedString", DemoModeDic.get(Language));
             ExpectedTranslatedStrings.put(ServerPath + "TranslatedString", ServerPathDic.get(Language));
@@ -112,7 +114,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(ShowPassword + "TranslatedString", Loc_Account_Settings_Page.chk_ShowPassword.getText());
             ActualTranslatedStrings.put(Logon + "TranslatedString", Loc_Account_Settings_Page.btn_LogOn.getText());
             
-
+            MobCommonFunctions.CloseApp();
             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         }
             Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
@@ -125,8 +127,6 @@ public class LocalizationTestSteps {
     public void GivenValidateTheLocalizationKeyOnAccountSettingsPage_ExistingConfigurationFor(String ServerPath, String Repository, String Provider, String UserName, String Password, String ShowPassword) throws Exception
     {
 
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
     	
         Map<String, String> ServerPathDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", ServerPath);
         Map<String, String> RepositoryDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Repository);
@@ -141,6 +141,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ServerPathDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
         	
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(ServerPath + "TranslatedString", ServerPathDic.get(Language));
@@ -157,7 +160,7 @@ public class LocalizationTestSteps {
             MobCommonFunctions.LaunchApp();
             Dialogs_Page.WaitUnitlUpdateWorkItemFlagDialogDisappears();
             MenuNav_Page.btn_HamBurgerMenu.click();
-            MenuNav_Page.btn_AccountSettings.get(0).click();
+            MenuNav_Page.btn_AccountSettings.click();
 
 
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
@@ -168,7 +171,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Password + "TranslatedString", Loc_Account_Settings_Page.txt_Selected_Password.getText());
             ActualTranslatedStrings.put(ShowPassword + "TranslatedString", Loc_Account_Settings_Page.chk_ShowPassword.getText());
 
-
+            MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         }
@@ -182,8 +185,7 @@ public class LocalizationTestSteps {
     @Given("Validate the Localization key on Menu Navigation page for '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnMenuNavigationPageFor(String Inbox, String FillForm, String Drafts, String SentItems, String Outbox, String Sync, String ManageAccount, String Settings, String Help, String LogOff) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
         Map<String, String> InboxDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "MenuNav", Inbox);
         Map<String, String> FillFormDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "MenuNav", FillForm);
@@ -202,6 +204,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	InboxDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
         	
         	
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
@@ -231,11 +236,11 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(SentItems + "TranslatedString", MenuNav_Page.btn_SentItems.getText());
             ActualTranslatedStrings.put(Outbox + "TranslatedString", MenuNav_Page.btn_Outbox.getText());
             ActualTranslatedStrings.put(Sync + "TranslatedString", MenuNav_Page.btn_Sync.getText());
-            ActualTranslatedStrings.put(ManageAccount + "TranslatedString", MenuNav_Page.btn_AccountSettings.get(0).getText());
+            ActualTranslatedStrings.put(ManageAccount + "TranslatedString", MenuNav_Page.btn_AccountSettings.getText());
             ActualTranslatedStrings.put(Settings + "TranslatedString", MenuNav_Page.btn_AppSettings.getText());
             ActualTranslatedStrings.put(Help + "TranslatedString", MenuNav_Page.btn_Help.getText());
             ActualTranslatedStrings.put(LogOff + "TranslatedString", MenuNav_Page.btn_LogOff.getText());
-
+            MobCommonFunctions.CloseApp();
 
    
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -249,8 +254,7 @@ public class LocalizationTestSteps {
     @Given("Validate the Localization key on Work Item Category Fiter for '(.*)','(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenValidateTheLocalizationKeyOnOnWorkItemCategoryFiter(String AllItems, String Approval, String Flagged, String Information, String InvokeFormItem) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
         Map<String, String> AllItemsDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItemFilter", AllItems);
         Map<String, String> ApprovalDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItemFilter", Approval);
@@ -266,7 +270,9 @@ public class LocalizationTestSteps {
         	String[] LangCodeAndCountry = Language.split("-");
         	AllItemsDic.get(Language);
         	
-
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
+        	
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(AllItems + "TranslatedString", AllItemsDic.get(Language));
             ExpectedTranslatedStrings.put(Approval + "TranslatedString", ApprovalDic.get(Language));
@@ -291,7 +297,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(InvokeFormItem + "TranslatedString", MenuNav_Page.btn_InvokeForm.getText());
 
 
-
+            MobCommonFunctions.CloseApp();
    
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -305,9 +311,7 @@ public class LocalizationTestSteps {
     public void GivenValidateTheLocalizationKeyOnAboutPageFor(String About, String AppName, String Version, String Copyright, String PrivacyPolicy, String ViewOnline, String TechnicalSupport, String ContactUs) throws Exception
     {
     	
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
-    	
+
         Map<String, String> AboutDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", About);
         Map<String, String> AppNameDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", AppName);
         Map<String, String> VersionDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Version);
@@ -324,6 +328,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	AboutDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(About + "TranslatedString", AboutDic.get(Language));
@@ -342,7 +349,7 @@ public class LocalizationTestSteps {
             MobCommonFunctions.LaunchApp();
             Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
             MenuNav_Page.btn_HamBurgerMenu.click();
-            MenuNav_Page.btn_AccountSettings.get(0).click();
+            MenuNav_Page.btn_AccountSettings.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
             sleep(1000);
@@ -359,7 +366,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(ViewOnline + "TranslatedString", About_Page.txt_ViewOnline.getText());
             ActualTranslatedStrings.put(TechnicalSupport + "TranslatedString", About_Page.txt_TechinicalSupport.getText());
             ActualTranslatedStrings.put(ContactUs + "TranslatedString", About_Page.txt_Contact.getText());
-
+            MobCommonFunctions.CloseApp();
 
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -374,8 +381,7 @@ public class LocalizationTestSteps {
     public void GivenValidateTheLocalizationKeyOnManageAccountOverflowIconFor(String DeleteAccount, String Help, String About) throws Exception
     {
     	
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
         Map<String, String> DeleteAccountDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DeleteAccount);
         Map<String, String> HelpDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Help);
@@ -389,6 +395,9 @@ public class LocalizationTestSteps {
         	String[] LangCodeAndCountry = Language.split("-");
         	DeleteAccountDic.get(Language);
         	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
+        	
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(DeleteAccount + "TranslatedString", DeleteAccountDic.get(Language));
             ExpectedTranslatedStrings.put(Help + "TranslatedString", HelpDic.get(Language));
@@ -401,7 +410,7 @@ public class LocalizationTestSteps {
             MobCommonFunctions.LaunchApp();
             Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
             MenuNav_Page.btn_HamBurgerMenu.click();
-            MenuNav_Page.btn_AccountSettings.get(0).click();
+            MenuNav_Page.btn_AccountSettings.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
             sleep(1000);
@@ -413,7 +422,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Help + "TranslatedString", OverFlowIcon_Page.btn_OverFlowHelp.getText());
             ActualTranslatedStrings.put(About + "TranslatedString", OverFlowIcon_Page.btn_OverFlowAbout.getText());
 
-
+            MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -427,8 +436,7 @@ public class LocalizationTestSteps {
     public void GivenValidateTheLocalizationKeyOnDeleteAccountWarningFor(String DeleteAccount, String DeleteAccountWarning, String OK, String Cancel) throws Exception
     {
     	
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
         Map<String, String> DeleteAccountDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DeleteAccount);
         Map<String, String> DeleteAccountWarningDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", DeleteAccountWarning);
@@ -444,6 +452,9 @@ public class LocalizationTestSteps {
         	String[] LangCodeAndCountry = Language.split("-");
         	DeleteAccountDic.get(Language);
         	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
+        	
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(DeleteAccount + "TranslatedString", DeleteAccountDic.get(Language));
             ExpectedTranslatedStrings.put(DeleteAccountWarning + "TranslatedString", DeleteAccountWarningDic.get(Language));
@@ -457,7 +468,7 @@ public class LocalizationTestSteps {
             MobCommonFunctions.LaunchApp();
             Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
             MenuNav_Page.btn_HamBurgerMenu.click();
-            MenuNav_Page.btn_AccountSettings.get(0).click();
+            MenuNav_Page.btn_AccountSettings.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
             sleep(1000);
@@ -472,7 +483,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(OK + "TranslatedString", Dialogs_Page.btn_DialogOK.getText());
             ActualTranslatedStrings.put(Cancel + "TranslatedString", Dialogs_Page.btn_Cancel.getText());
 
-
+            MobCommonFunctions.CloseApp();
 
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -487,19 +498,18 @@ public class LocalizationTestSteps {
     public void GivenValidateTheLocalizationKeyOnAppSettingsPageFor(String SettingsText, String LoggingListButton, String SyncListButton, String LoggingText, String SyncText, String Level, String Error, String Warning, String Information, String ItemsToSyncDataAndLookUp) throws Exception
     {
         
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
-    	Map<String, String> SettingsTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", SettingsText);
-        Map<String, String> LoggingListButtonDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", LoggingListButton);
-        Map<String, String> SyncListButtonDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", SyncListButton);
-        Map<String, String> LoggingTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", LoggingText);
-        Map<String, String> SyncTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", SyncText);
-        Map<String, String> LevelDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", Level);
-        Map<String, String> ErrorDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", Error);
-        Map<String, String> WarningDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", Warning);
-        Map<String, String> InformationDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", Information);
-        Map<String, String> ItemsToSyncDataAndLookUpDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile + LocalizationDataSourceFile, "AppSettingsPage", ItemsToSyncDataAndLookUp);
+    	Map<String, String> SettingsTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", SettingsText);
+        Map<String, String> LoggingListButtonDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", LoggingListButton);
+        Map<String, String> SyncListButtonDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", SyncListButton);
+        Map<String, String> LoggingTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", LoggingText);
+        Map<String, String> SyncTextDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", SyncText);
+        Map<String, String> LevelDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", Level);
+        Map<String, String> ErrorDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", Error);
+        Map<String, String> WarningDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", Warning);
+        Map<String, String> InformationDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", Information);
+        Map<String, String> ItemsToSyncDataAndLookUpDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AppSettingsPage", ItemsToSyncDataAndLookUp);
 
 
         boolean OverAllTestResult = true;
@@ -508,6 +518,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	SettingsTextDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
         	
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(SettingsText + "TranslatedString", SettingsTextDic.get(Language));
@@ -558,7 +571,7 @@ public class LocalizationTestSteps {
 
             ActualTranslatedStrings.put(SyncText + "TranslatedString", AppSettings_Page.txt_Sync.getText());
             ActualTranslatedStrings.put(ItemsToSyncDataAndLookUp + "TranslatedString", AppSettings_Page.txt_ItemsToSyncForLookupAndData.getText());
-
+            MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -571,8 +584,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on Approval Work Item Page for '(.*)', '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnApprovalWorkItemPageFor(String Approve, String Reject, String CommentPlaceholder, String ApproveConfirmMessage, String ApproveSuccessMessage, String RejectConfirmMessage, String RejectSuccessMessage) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
         Map<String, String> ApproveDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", Approve);
         Map<String, String> RejectDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", Reject);
@@ -590,6 +602,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ApproveDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(Approve + "TranslatedString", ApproveDic.get(Language));
@@ -610,7 +625,7 @@ public class LocalizationTestSteps {
             sleep(1000);
             Inbox_Page.NavigateToWorkItemFilter("Approval");
             sleep(1000);
-            Inbox_Page.clickOnWorkItemContainingTitle("Request for an putitional raw material order");
+            Inbox_Page.clickOnWorkItemContainingTitle("Request for an additional raw material order");
             sleep(1000);
             MobileAppiumFunctions.waituntilElementclickable(ApproveWorkItemPage.btn_Approve);
 
@@ -627,7 +642,7 @@ public class LocalizationTestSteps {
             Dialogs_Page.btn_DialogOK.click();
             ActualTranslatedStrings.put(ApproveSuccessMessage + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
             
-            MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+            MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
 
             //Navigate to Reject Confirmation Page
             Inbox_Page.clickOnWorkItemContainingTitle("Recipe has been successfully updated");
@@ -641,7 +656,7 @@ public class LocalizationTestSteps {
             Dialogs_Page.btn_DialogOK.click();
             ActualTranslatedStrings.put(RejectSuccessMessage + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
-
+             MobCommonFunctions.CloseApp();
      
    
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -655,8 +670,7 @@ public class LocalizationTestSteps {
     public void ThenValidateTheLocalizationKeyOnRemoveWorkItemPageFor(String HoursAgo, String MinutesAgo, String OneHourAgo, String Remove) throws Exception
     {
 
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
         Map<String, String> HoursAgoDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", HoursAgo);
         Map<String, String> MinutesAgoDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", MinutesAgo);
@@ -670,6 +684,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	HoursAgoDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(MinutesAgo + "TranslatedString", MinutesAgoDic.get(Language));
@@ -699,9 +716,11 @@ public class LocalizationTestSteps {
             MobileAppiumFunctions.waituntilElementclickable(InformationWorkItemPage.btn_Remove);
 
             ActualTranslatedStrings.put(Remove + "TranslatedString", InformationWorkItemPage.btn_Remove.getText());
+             MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+            OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
+             
         }
 
         Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
@@ -710,20 +729,25 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key for no item available messages '(.*)' , '(.*)', '(.*)', '(.*)'$")
     public void ThenValidateTheLocalizationKeyForNoItemAvailableMessages( String Outbox_List_NoItemsAvailable, String SentItems_List_NoItemsAvailable, String WorkItem_List_NoItemsAvailable, String Drafts_List_NoItemsAvailable) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> WorkItem_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", WorkItem_List_NoItemsAvailable);
         Map<String, String> Drafts_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Drafts", Drafts_List_NoItemsAvailable);
         Map<String, String> Outbox_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Outbox", Outbox_List_NoItemsAvailable);
         Map<String, String> SentItems_List_NoItemsAvailableDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "SentItems", SentItems_List_NoItemsAvailable);
+        
+  
 
         boolean OverAllTestResult = true;
+        
 
         for ( String key : WorkItem_List_NoItemsAvailableDic.keySet() ) {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	WorkItem_List_NoItemsAvailableDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(WorkItem_List_NoItemsAvailable + "TranslatedString", WorkItem_List_NoItemsAvailableDic.get(Language));
@@ -737,6 +761,12 @@ public class LocalizationTestSteps {
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
             Account_Settings_Page.TurnONDemoMode();
+            
+
+            AppSettings_Page.turnOnDraftsInSettings();
+            MenuNav_Page.btn_Back.click();
+
+            
             Inbox_Page.NavigateToWorkItemFilter("Invoke Form");
             sleep(1000);
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
@@ -753,10 +783,10 @@ public class LocalizationTestSteps {
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_SentItems.click();
             ActualTranslatedStrings.put(SentItems_List_NoItemsAvailable + "TranslatedString", SentItems_Page.txt_NoItemsAvailable.getText());
+            MobCommonFunctions.CloseApp();
 
-
-   
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+            
+            OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -766,8 +796,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on fill forms page for '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnFillFormsPageFor(String FillForm_SaveAsDraft_Success, String FillForm_Submission_Success) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> FillForm_SaveAsDraft_SuccessDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "FillForms", FillForm_SaveAsDraft_Success);
         Map<String, String> FillForm_Submission_SuccessDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "FillForms", FillForm_Submission_Success);
@@ -779,6 +808,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	FillForm_SaveAsDraft_SuccessDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(FillForm_SaveAsDraft_Success + "TranslatedString", FillForm_SaveAsDraft_SuccessDic.get(Language));
@@ -805,7 +837,7 @@ public class LocalizationTestSteps {
             FillForm_Page.EnterFormInput("TestName", "TestEmailgmail.com", "11/11/2001");
             ActualTranslatedStrings.put(FillForm_Submission_Success + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
-
+            MobCommonFunctions.CloseApp();
    
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -818,8 +850,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on Drafts page for '(.*)' , '(.*)' , '(.*)', '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnDraftsPageFor(String ClearAll, String ClearAllErrorTitle, String ClearAll_ConfirmMessage, String DeleteSelectedItems, String DeleteSelectedItems_ConfirmMessage) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
         Map<String, String> ClearAllErrorTitleDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAllErrorTitle);
@@ -846,6 +877,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ClearAllDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(ClearAll + "TranslatedString", ClearAllDic.get(Language));
@@ -879,7 +913,7 @@ public class LocalizationTestSteps {
             OverFlowIcon_Page.btn_OverFlowOptions.get(0).click();
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
-
+             MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -891,8 +925,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on sent items page for '(.*)' , '(.*)' , '(.*)', '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnSentItemsPageFor(String ClearAll, String ClearAllErrorTitle, String ClearAll_ConfirmMessage, String DeleteSelectedItems, String DeleteSelectedItems_ConfirmMessage) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
         Map<String, String> ClearAllErrorTitleDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAllErrorTitle);
@@ -915,6 +948,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ClearAllDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(ClearAll + "TranslatedString", ClearAllDic.get(Language));
@@ -949,7 +985,7 @@ public class LocalizationTestSteps {
             OverFlowIcon_Page.btn_OverFlowOptions.get(0).click();
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
-
+             MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -961,8 +997,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on outbox page for '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnOutboxPageFor(String ClearAll, String ClearAllErrorTitle, String ClearAll_ConfirmMessage, String DeleteSelectedItems, String DeleteSelectedItems_ConfirmMessage, String Outbox_List_SubHeader_FillForms, String Outbox_List_SubHeader_WorkItems) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> ClearAllDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAll);
         Map<String, String> ClearAllErrorTitleDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "PopUpCommonItems", ClearAllErrorTitle);
@@ -1007,6 +1042,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ClearAllDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(ClearAll + "TranslatedString", ClearAllDic.get(Language));
@@ -1049,7 +1087,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
             Dialogs_Page.btn_Cancel.click();
-
+             MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -1061,8 +1099,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on work items page for '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnWorkItemsPageFor(String NoSubject, String LoadMore, String SecondsAgo) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> WorkItem_List_NoSubjectDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", NoSubject);
         Map<String, String> LoadMoreDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "WorkItems", LoadMore);
@@ -1080,6 +1117,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	WorkItem_List_NoSubjectDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(NoSubject + "TranslatedString", WorkItem_List_NoSubjectDic.get(Language));
@@ -1122,7 +1162,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(NoSubject + "TranslatedString", FirstWorkItemTitle);
             ActualTranslatedStrings.put(LoadMore + "TranslatedString", Inbox_Page.btn_LoadMore.getText());
 
-
+             MobCommonFunctions.CloseApp();
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
@@ -1134,9 +1174,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on login page for '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnLoginPageFor(String UserName, String Password, String ShowPassword, String Logon, String Error_114, String ModalDialog_TitleError) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
-    	
+
     	Map<String, String> UserNameDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", UserName);
         Map<String, String> PasswordDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", Password);
         Map<String, String> ShowPasswordDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "AccountSettingsPage", ShowPassword);
@@ -1156,6 +1194,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	UserNameDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(UserName + "TranslatedString", UserNameDic.get(Language));
@@ -1186,7 +1227,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(ModalDialog_TitleError + "TranslatedString", LogOff_In_Page.text_LoginPage_DialogTitle.getText());
 
 
-   
+             MobCommonFunctions.CloseApp();
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
@@ -1196,8 +1237,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key when network connection is not available for '(.*)' , '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyWhenNetworkConnectionIsNotAvailableFor(String FillForm_Submission_Queued, String Error_Outbox_CannotViewIfAccountOnline, String Error_NoInternetConnectivity, String Error_0) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> Error_NoInternetConnectivityDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_NoInternetConnectivity);
         Map<String, String> Error_0Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_0);
@@ -1210,6 +1250,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	Error_NoInternetConnectivityDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(Error_NoInternetConnectivity + "TranslatedString", Error_NoInternetConnectivityDic.get(Language));
@@ -1261,7 +1304,7 @@ public class LocalizationTestSteps {
             Outbox_Page.OpenFirstFormFromOutbox();
             sleep(500);
             ActualTranslatedStrings.put(Error_Outbox_CannotViewIfAccountOnline + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
-
+             MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -1274,8 +1317,7 @@ public class LocalizationTestSteps {
     public void ThenValidateTheLocalizationKeyForErrorsFromManageAccountSettingsPageFor(String Error_99, String Error_100, String Error_130) throws Exception
     {
         
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> Error_99Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_99);
         Map<String, String> Error_100Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_100);
@@ -1284,9 +1326,15 @@ public class LocalizationTestSteps {
         boolean OverAllTestResult = true;
 
         for ( String key : Error_99Dic.keySet() ) {
+        	if(key.equals("zh-CN"))
+        	{
+
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	Error_99Dic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(Error_99 + "TranslatedString", Error_99Dic.get(Language));
@@ -1330,33 +1378,39 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Error_130 + "TranslatedString", LogOff_In_Page.text_LoginPage_DialogError.getText());
             LogOff_In_Page.btn_Login_Page_DialogOK.click();
 
-
+             MobCommonFunctions.CloseApp();
 
   
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             
+        	}
+
 
         }
         Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
+    
+    
 
     @Then("^^Validate the Localization key on Eula Page for '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnEulaPageFor(String Eula_Accept, String Eula_Cancel) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> Eula_AcceptDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Eula", Eula_Accept);
         Map<String, String> Eula_CancelDic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Eula", Eula_Cancel);
    
 
         boolean OverAllTestResult = true;
-        //MobCommonFunctions.RemoveAppp();
-        //MobCommonFunctions.InstallApp();
+        MobCommonFunctions.clearAppData();
 
         for ( String key : Eula_AcceptDic.keySet() ) {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	Eula_AcceptDic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
             ExpectedTranslatedStrings.put(Eula_Accept + "TranslatedString", Eula_AcceptDic.get(Language));
@@ -1375,7 +1429,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Eula_Accept + "TranslatedString", Eula_Page.btn_Eula_Accept.getText());
             ActualTranslatedStrings.put(Eula_Cancel + "TranslatedString", Eula_Page.btn_Eula_Cancel.getText());
 
-
+             MobCommonFunctions.CloseApp();
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
@@ -1387,8 +1441,7 @@ public class LocalizationTestSteps {
     @Then("^Validate the Localization key on login for '(.*)' , '(.*)' , '(.*)'$")
     public void ThenValidateTheLocalizationKeyOnLoginFor(String Error_142, String Error_141, String QRCodeScannerMessage) throws Exception
     {
-    	PrintWriter writer  = getFileWriter();
-    	String fileName = getTextFileName();
+
     	
     	Map<String, String> Error_142Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_142);
         //Map<String, String> Error_141Dic = ExcelHelper.ReadLocalizationValues(LocalizationDataSourceFile, "Errors", Error_141);
@@ -1403,6 +1456,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	Error_142Dic.get(Language);
+        	
+        	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
+        	PrintWriter writer  = getFileWriter(fileName);
 
 
             Map<String, String> ExpectedTranslatedStrings = new HashMap<String, String>();
@@ -1431,7 +1487,7 @@ public class LocalizationTestSteps {
 
             //ActualTranslatedStrings.put(Error_141 + "TranslatedString", Account_Settings_Page.txt_AlertDialog_Msg.getText());
 
-  
+             MobCommonFunctions.CloseApp();
    
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -1497,10 +1553,10 @@ public class LocalizationTestSteps {
     	 return fileName;
     }
     
-    private PrintWriter getFileWriter() throws FileNotFoundException, UnsupportedEncodingException
+    private PrintWriter getFileWriter(String FileName) throws FileNotFoundException, UnsupportedEncodingException
     {
     	
-    	String destinationPath  = CucumberRunner.cucumberAbsoluteReportPath + "/screenshots/" + getTextFileName();
+    	String destinationPath  = CucumberRunner.cucumberAbsoluteReportPath + "/screenshots/" + FileName;
     	PrintWriter writer = new PrintWriter(destinationPath , "UTF-8");
 
     	return writer;

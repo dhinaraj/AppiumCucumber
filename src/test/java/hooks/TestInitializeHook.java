@@ -10,12 +10,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.SessionId;
 import org.xml.sax.SAXException;
 
 import base.config.ConfigReader;
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobProp;
 import base.genericLib_Web.UIProp;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
@@ -36,15 +38,31 @@ public class TestInitializeHook {
     //Hook Methods For Chrome Drivers
     public static void InitializeDriverAndBrowser()
     {
-        OpenBrowser();
-        setImplicitTimeout(UIProp.getUIDriver(), 30);
-        maximizeBrowser(UIProp.getUIDriver());
+        if (UIProp.getUIDriver() == null)
+        {
+        	OpenBrowser();
+            setImplicitTimeout(UIProp.getUIDriver(), 15);
+            maximizeBrowser(UIProp.getUIDriver());
+        }
+
+
+    }
+    
+    public static void quitWebDriver()
+    {
+        if (UIProp.getUIDriver() != null)
+        {
+        	TestInitializeHook.quitDriver(UIProp.getUIDriver());
+        }
+
 
     }
 
     public static void InitializeMobileDriver()
     {
-        if (MobProp.getMobDriver() == null)
+    	
+    	
+    	if (MobProp.getMobDriver() == null)
         {
             StartMobileAppAppium();
         }
@@ -322,18 +340,19 @@ public class TestInitializeHook {
                 AndroidCapabilities.setCapability("deviceName", GlobalSettings.getDeviceName());
                 AndroidCapabilities.setCapability("platformName", "Android");
                 AndroidCapabilities.setCapability("platformVersion", "8.0");
-                //AndroidCapabilities.setCapability("appPackage", "com.schneiderelectric.worktaskspro");
-                AndroidCapabilities.setCapability("fullReset", false);
+                AndroidCapabilities.setCapability("appPackage", "com.schneiderelectric.worktaskspro");
                 AndroidCapabilities.setCapability("noReset", true);            
-                AndroidCapabilities.setCapability("app", GlobalSettings.getAndroidMobileAppPath());
-                //AndroidCapabilities.setCapability("appActivity", "md5ecbd7707d85d05718ebd3878aa5c9af9.SplashActivity");
+                //AndroidCapabilities.setCapability("app", GlobalSettings.getAndroidMobileAppPath());
+                AndroidCapabilities.setCapability("appActivity", "md53008f3147f8baeda24be77bc62dea917.SplashActivity");
                 //AndroidCapabilities.setCapability("autoAcceptAlerts", true);
                 AndroidCapabilities.setCapability("unicodeKeyboard", true);
+                //AndroidCapabilities.setCapability("forceMjsonwp", true);
                 //AndroidCapabilities.setCapability("resetkeyboard", true);
                 AndroidCapabilities.setCapability("automationName", "uiautomator2");
                 AndroidCapabilities.setCapability("newCommandTimeout", 300);
                 //AndroidCapabilities.setCapability("ignoreUnimportantViews", "true");
                 //AndroidCapabilities.setCapability("report.disable",true);
+                AndroidCapabilities.setCapability("app", GlobalSettings.getAndroidMobileAppPath());
                 try
                 {
                     MobProp.setMobDriver(new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), AndroidCapabilities));
@@ -355,20 +374,23 @@ public class TestInitializeHook {
                 IOSCapabilities.setCapability("automationName", "XCUITest");
                 IOSCapabilities.setCapability("platformName", "iOS");
                 IOSCapabilities.setCapability("platformVersion", "11.4.1");
-                IOSCapabilities.setCapability("deviceName", "Auron's iPhone");
-                IOSCapabilities.setCapability("udid", "2EF8C9A5-B464-4F97-A9CC-BFBC223AFE30");
-                IOSCapabilities.setCapability("noReset", "true");
+                IOSCapabilities.setCapability("deviceName", "Aveva iPhone");
+                IOSCapabilities.setCapability("udid", "32798c6c811f74f62ac6e73c24258f7286484ee2");
+                IOSCapabilities.setCapability("noReset", true);
                 //IOSCapabilities.setCapability("bundleId", "com.schneiderelectric.worktaskspro");
-               // IOSCapabilities.setCapability("bundleId", "com.V9S2B6YKKV_com.schneiderelectric.worktaskspro");
-                IOSCapabilities.setCapability("app", "Settings");
+                IOSCapabilities.setCapability("bundleId", "com.V9S2B6YKKV_com.schneiderelectric.worktaskspro");
+                //IOSCapabilities.setCapability("app", "Settings");
                 IOSCapabilities.setCapability("clearSystemFiles", true);
                 IOSCapabilities.setCapability("forceMjsonwp", true);
-                IOSCapabilities.setCapability("ignoreUnimportantViews", "true");
-                IOSCapabilities.setCapability("newCommandTimeout", "300");
-                IOSCapabilities.setCapability("report.disable", true);
-                IOSCapabilities.setCapability("maxTypingFrequency ", 120);
-                IOSCapabilities.setCapability("language", "de");
-                IOSCapabilities.setCapability("locales", "de_DE");
+                //IOSCapabilities.setCapability("fullReset", true);
+                IOSCapabilities.setCapability("newCommandTimeout", 300);
+                //IOSCapabilities.setCapability("report.disable", true);
+                IOSCapabilities.setCapability("maxTypingFrequency ", 60);
+                //IOSCapabilities.setCapability("language", "de");
+                //IOSCapabilities.setCapability("locales", "de_DE");
+                IOSCapabilities.setCapability("app", GlobalSettings.getIOSMobileAppPath());
+                //IOSCapabilities.setCapability("simpleIsVisibleCheck", true);
+                
                 try
                 {
                     MobProp.setMobDriver(new IOSDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), IOSCapabilities));

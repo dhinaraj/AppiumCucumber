@@ -17,33 +17,33 @@ public class About_Page extends WTAPageObject {
 	
 	
 	@AndroidFindBy(xpath ="((//*[@resource-id='configuration']/*[@class='android.view.View'])[2]/*[@text and @class='android.view.View'])[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
     public MobileElement txt_AppName;
 	
 	
 	@AndroidFindBy(xpath ="((//*[@resource-id='configuration']/*[@class='android.view.View'])[2]/*[@text and @class='android.view.View'])[2]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
     public MobileElement txt_Version;
 	
 
 	@AndroidFindBy(xpath ="((//*[@resource-id='configuration']/*[@class='android.view.View'])[2]/*[@text and @class='android.view.View'])[3]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
     public MobileElement txt_CopyRight;
 	
 	@AndroidFindBy(xpath ="((//*[@resource-id='configuration']/*[@class='android.view.View'])[2]/*[@text and @class='android.view.View'])[4]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
     public MobileElement txt_PrivacyPolicy;
 	
 	@AndroidFindBy(xpath ="((//*[@resource-id='configuration']/*[@class='android.view.View'])[2]/*[@text and @class='android.view.View'])[5]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
     public MobileElement txt_ViewOnline;
 	
 	@AndroidFindBy(xpath ="((//*[@resource-id='configuration']/*[@class='android.view.View'])[2]/*[@text and @class='android.view.View'])[6]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
     public MobileElement txt_TechinicalSupport;
 	
 	@AndroidFindBy(xpath ="((//*[@resource-id='configuration']/*[@class='android.view.View'])[2]/*[@text and @class='android.view.View'])[7]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
     public MobileElement txt_Contact;
 
 }

@@ -28,6 +28,17 @@ public class App_Install_Uninstall_Steps {
 		MobCommonFunctions.LaunchApp();
 
 	}
+	
+	
+	@Given("^I clear the app data$")
+	public void i_clear_the_app_data() throws Throwable {
+
+		MobCommonFunctions.clearAppData();
+
+	}
+	
+	
+	
 
 
 

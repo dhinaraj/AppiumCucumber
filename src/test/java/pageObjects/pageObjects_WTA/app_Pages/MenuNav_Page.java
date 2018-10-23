@@ -20,7 +20,7 @@ public class MenuNav_Page extends WTAPageObject {
 	Dialogs_Page Dialogs_Page = new Dialogs_Page();
 	
 	@AndroidFindBy(xpath = "//*[@text='Menu']")
-	@iOSFindBy(xpath = "//XCUIElementTypeButton[text()='Menu']")
+	@iOSFindBy(accessibility = "Menu")
 	public MobileElement btn_HamBurgerMenu;
 
 
@@ -36,23 +36,23 @@ public class MenuNav_Page extends WTAPageObject {
 	@iOSFindBy(xpath = "//*[@id='Refresh']/preceding-sibling::*[1]")
 	public MobileElement btn_Inbox_Dropdown;
 
-	@AndroidFindBy(xpath = "//*[@resource-id[contains(.,'select_option_')]]")
+	@AndroidFindBy(xpath = "(//*[@resource-id[contains(.,'select_option_')]])[1]")
 	@iOSFindBy(id = "All Items")
 	public MobileElement btn_AllItems;
 
-	@AndroidFindBy(xpath = "//*[@resource-id[contains(.,'select_option_')]]")
+	@AndroidFindBy(xpath = "(//*[@resource-id[contains(.,'select_option_')]])[2]")
 	@iOSFindBy(id = "Approval")
 	public MobileElement btn_Approval;
 
-	@AndroidFindBy(xpath = "//*[@resource-id[contains(.,'select_option_')]]")
+	@AndroidFindBy(xpath = "(//*[@resource-id[contains(.,'select_option_')]])[3]")
 	@iOSFindBy(id = "Invoke Form")
 	public MobileElement btn_InvokeForm;
 
-	@AndroidFindBy(xpath = "//*[@resource-id[contains(.,'select_option_')]]")
+	@AndroidFindBy(xpath = "(//*[@resource-id[contains(.,'select_option_')]])[4]")
 	@iOSFindBy(id = "Information")
 	public MobileElement btn_Information;
 
-	@AndroidFindBy(xpath = "//*[@resource-id[contains(.,'select_option_')]]")
+	@AndroidFindBy(xpath = "(//*[@resource-id[contains(.,'select_option_')]])[5]")
 	@iOSFindBy(id = "Flagged")
 	public MobileElement btn_Flagged;
 
@@ -76,13 +76,14 @@ public class MenuNav_Page extends WTAPageObject {
 	@iOSFindBy(id = "Refresh")
 	public MobileElement btn_Sync;
 
-	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Settings')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
+	@AndroidFindBy(xpath = "(//*[@text[contains(.,'NavigationMenu_Settings')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View'])[1]")
 	@iOSFindBy(id = "NavigationMenu_Settings")
-	public List<MobileElement> btn_AccountSettings;
+	public MobileElement btn_AccountSettings;
 
-	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Settings')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
+	@AndroidFindBy(xpath = "(//*[@text[contains(.,'NavigationMenu_Settings')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View'])[2]")
 	@iOSFindBy(id = "NavigationMenu_Settings")
 	public MobileElement btn_AppSettings;
+	
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Help')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
 	@iOSFindBy(id = "NavigationMenu_Help")

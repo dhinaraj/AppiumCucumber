@@ -40,11 +40,11 @@ public class Outbox_Page extends WTAPageObject {
 	public MobileElement txt_NoItemsAvailable;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='outbox']/android.view.View[3]/android.view.View/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_FillForms_Header;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='outbox']/android.view.View[3]/android.view.View[2]/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_WorkItems_Header;
 	
     public void OpenFirstFormFromOutbox()

@@ -14,6 +14,14 @@ public class GlobalSettings {
 	private static String browser ;
 
 	private static String webAppUrl ;
+	
+	private static String testRepoName ;
+	
+	private static String httpUrl ;
+	
+	private static String httpsUrl ;
+	
+	private static String azureServiceBusUrl ;
 
     //public static SqlConnection SketlaSQLConnection ;
 
@@ -191,6 +199,38 @@ public class GlobalSettings {
 
 	public static void setGenrateStepsSkeleton(String genrateStepsSkeleton) {
 		GenrateStepsSkeleton = genrateStepsSkeleton;
+	}
+
+	public static String getHttpUrl() {
+		return httpUrl;
+	}
+
+	public static void setHttpUrl(String httpUrl) {
+		GlobalSettings.httpUrl = httpUrl;
+	}
+
+	public static String getHttpsUrl() {
+		return httpsUrl;
+	}
+
+	public static void setHttpsUrl(String httpsUrl) {
+		GlobalSettings.httpsUrl = httpsUrl;
+	}
+
+	public static String getAzureServiceBusUrl() {
+		return azureServiceBusUrl;
+	}
+
+	public static void setAzureServiceBusUrl(String azureServiceBusUrl) {
+		GlobalSettings.azureServiceBusUrl = azureServiceBusUrl;
+	}
+
+	public static String getTestRepoName() {
+		return testRepoName;
+	}
+
+	public static void setTestRepoName(String testRepoName) {
+		GlobalSettings.testRepoName = testRepoName;
 	}  
     
     

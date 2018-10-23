@@ -51,23 +51,23 @@ public class Loc_Account_Settings_Page extends WTAPageObject {
 
 
 	@AndroidFindBy(xpath = "//*[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[1]/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_Selected_ServerPath;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[2]/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement dropdown_Selected_Repository;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[3]/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement dropdown_Selected_Provider;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[4]/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_Selected_Username;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[5]/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_Selected_Password;
 	
 	

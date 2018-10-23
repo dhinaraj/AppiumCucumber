@@ -22,11 +22,11 @@ public class FillForm_Page extends WTAPageObject {
 	public MobileElement btn_FillForm_ByName;
 	
 	@AndroidFindBy(xpath = "//android.widget.EditText")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public List<MobileElement> fld_FillForm_TextFieldList;
 
 	@AndroidFindBy(xpath = "//android.widget.EditText")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public List<MobileElement> fld_FillForm_ComboBoxList;
 
 	@AndroidFindBy(xpath = "//android.widget.Button[@text='FINISH']")
@@ -34,11 +34,11 @@ public class FillForm_Page extends WTAPageObject {
 	public MobileElement btn_Finish;
 
 	@AndroidFindBy(xpath = "//android.view.View[@text='Log Off']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_AlertDialog;
 
 	@AndroidFindBy(xpath = "//android.view.View[@text='Form submitted successfully.']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement alert_FormSubmittedSucessfully;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='fillform']/android.view.View[2]/android.view.View")
@@ -46,7 +46,7 @@ public class FillForm_Page extends WTAPageObject {
 	public MobileElement txt_NoFillFormsAvailable;
 
 	@AndroidFindBy(xpath = "//*[@text='Save']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_SaveDraft;
 	
 	

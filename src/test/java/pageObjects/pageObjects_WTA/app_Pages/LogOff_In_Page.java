@@ -18,59 +18,49 @@ public class LogOff_In_Page extends WTAPageObject {
 	MenuNav_Page MenuNav_Page = new MenuNav_Page();
 	
 	@AndroidFindBy(xpath = "//android.widget.EditText[@resource-id[contains(., 'input')]]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement fld_UserName;
 
 	@AndroidFindBy(xpath = "//android.widget.EditText[@resource-id[contains(., 'input')]]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement fld_Password;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='login']/android.view.View[2]/android.view.View/android.view.View[1]/android.view.View[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement loc_fld_UserName;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='login']/android.view.View[2]/android.view.View/android.view.View[2]/android.view.View[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement loc_fld_Password;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='login']//*[@class='android.widget.CheckBox']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement chkbox_ShowPassword;
 
 	@AndroidFindBy(xpath = "//android.view.View[@resource-id='login']/android.view.View[3]/android.view.View/android.widget.Button")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_LogOn;
 
 	@AndroidFindBy(xpath = "//*[@resource-id[contains(.,'dialogContent')]]/android.view.View[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement text_LoginPage_DialogTitle;
 
 	@AndroidFindBy(xpath = "//*[@resource-id[contains(.,'dialogContent')]]/android.view.View[2]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement text_LoginPage_DialogError;
 
 	@AndroidFindBy(xpath = "//*[@text='Alert Dialog']/android.view.View[2]/android.widget.Button")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_Login_Page_DialogOK;
 	
     public void LogIn(String UserName, String Password)
     {
-        switch (GlobalSettings.getMobilePlatformToRunTest())
-        {
-            case "Windows":
-                fld_UserName.clear();
-                fld_UserName.sendKeys(UserName);
-                fld_Password.clear();
-                fld_Password.sendKeys(Password);
-                break;
-            case "Android":
+
                 fld_UserName.clear();
                 fld_UserName.sendKeys(UserName);
                 fld_Password.clear();
                 fld_Password.sendKeys(Password);
 
-                break;
-        }
 
         btn_LogOn.click();
 

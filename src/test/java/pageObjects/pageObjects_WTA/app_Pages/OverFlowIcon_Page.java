@@ -14,19 +14,19 @@ import io.appium.java_client.ios.IOSElement;
 public class OverFlowIcon_Page extends WTAPageObject {
 	
 	@AndroidFindBy(xpath = "//*[@class='android.view.MenuItem']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public List<MobileElement> btn_OverFlowOptions;
 
 	@AndroidFindBy(xpath = "//*[@class='android.view.MenuItem']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_OverFlowDeleteAccount;
 
 	@AndroidFindBy(xpath = "//*[@class='android.view.MenuItem']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_OverFlowHelp;
 
 	@AndroidFindBy(xpath = "//*[@class='android.view.MenuItem']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_OverFlowAbout;
 	
 

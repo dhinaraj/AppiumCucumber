@@ -1,13 +1,16 @@
 package base.genericLib_Mob;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.PageFactory;
 
 import base.config.GlobalSettings;
+import hooks.TestInitializeHook;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
@@ -18,15 +21,24 @@ import pageObjects.pageObjects_WTA.app_Pages.*;
 public class MobCommonFunctions {
 
 	private  AppiumDriver<MobileElement> newAppiumDriver;
-
-
+	
+	
+	TestInitializeHook mainHook = new TestInitializeHook();
+	
+	
+	
+	
+	
 
 	public void changeDeviceLanguage(String Language, String Country) {
 		
-		SettingsPage SettingsPage = new SettingsPage();
-		MenuNav_Page MenuNavPage = new MenuNav_Page();
+
 
 		if (GlobalSettings.getMobilePlatformToRunTest().equals("IOS")) {
+			
+			SettingsPage SettingsPage = new SettingsPage();
+			MenuNav_Page MenuNavPage = new MenuNav_Page();
+			
 			DesiredCapabilities IOSCapabilities = new DesiredCapabilities();
 
 			IOSCapabilities.setCapability("automationName", "XCUITest");
@@ -71,8 +83,15 @@ public class MobCommonFunctions {
 	public void RunCmdCommand(String Command) {
 
 		try {
-			Process process = Runtime.getRuntime().exec("cmd /c start cmd.exe /C " + Command);
 
+			//Use below when running test from Windows
+				//Process process = Runtime.getRuntime().exec("cmd /c start cmd.exe /C " + Command);
+
+			//Use below when test is run from MAC
+					Runtime.getRuntime().
+							exec("/Users/administrator/Library/Android/sdk/platform-tools/"+ Command);
+    
+	        
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -94,10 +113,11 @@ public class MobCommonFunctions {
 
 		try {
 			if (GlobalSettings.getMobilePlatformToRunTest().equals("Android")) {
-				MobProp.getMobDriver().removeApp("com.schneiderelectric.worktaskspro");
+				//MobProp.getMobDriver().removeApp("com.schneiderelectric.worktaskspro");
+				RunCmdCommand("adb uninstall com.schneiderelectric.worktaskspro");
 			}
 			if (GlobalSettings.getMobilePlatformToRunTest().equals("IOS")) {
-				MobProp.getMobDriver().removeApp("");
+				MobProp.getMobDriver().removeApp("com.V9S2B6YKKV_com.schneiderelectric.worktaskspro");
 			}
 		} catch (Exception e) {
 
@@ -108,6 +128,11 @@ public class MobCommonFunctions {
 		if (GlobalSettings.getMobilePlatformToRunTest().equals("Android")) {
 			MobProp.getMobDriver().installApp(GlobalSettings.getAndroidMobileAppPath());
 		}
+		
+		if (GlobalSettings.getMobilePlatformToRunTest().equals("IOS")) {
+			MobProp.getMobDriver().installApp(GlobalSettings.getIOSMobileAppPath());
+		}
+		
 	}
 
 	public void SwitchToOfflineMode() {
@@ -154,6 +179,16 @@ public class MobCommonFunctions {
 
 		}
 
+	}
+	
+	
+	public void clearAppData() {
+		
+			//Android Command to Reset App
+			//RunCmdCommand("adb shell pm clear com.schneiderelectric.worktaskspro");
+			MobProp.getMobDriver().resetApp();
+
+		
 	}
 	
     public void sleep(int milliSeconds)

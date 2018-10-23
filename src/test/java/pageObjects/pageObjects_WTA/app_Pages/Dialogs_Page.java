@@ -18,35 +18,35 @@ public class Dialogs_Page extends WTAPageObject {
 	
 
 	@AndroidFindBy(xpath = "//*[@class='android.app.Dialog']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement box_Dialog_Loader;
 
 	@AndroidFindBy(xpath = "//*[@class='android.widget.ProgressBar']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement box_Dialog_ProgressBar;
 
 	@AndroidFindBy(xpath = "//*[@class='android.app.Dialog']/android.view.View[2]/android.widget.Button[2]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_DialogOK;
 
 	@AndroidFindBy(xpath = "//*[@class='android.app.Dialog']/android.view.View[2]/android.widget.Button[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_Cancel;
 
 	@AndroidFindBy(xpath = "//*[@class='android.app.Dialog']/android.view.View/android.view.View[2]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement text_DialogError;
 
 	@AndroidFindBy(xpath = "//*[@class='android.app.Dialog']/android.view.View/android.view.View[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "//XCUIElementTypeOther[@name=\"document\"]/XCUIElementTypeOther[1]")
 	public MobileElement text_DialogTitle;
 
 	@AndroidFindBy(accessibility = "Network connection is currently unavailable. Form will be submitted when the network connection is active. ")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_FormWillBeSubmittedWhenAppIsOnline;
 
 	@AndroidFindBy(xpath = "//*/android.webkit.WebView/android.view.View/android.view.View[1]/android.view.View/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_ConfirmationMessgageInFooter;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='wt_connectivitystatusbar']/android.view.View")
@@ -54,7 +54,23 @@ public class Dialogs_Page extends WTAPageObject {
 	public MobileElement txt_NetworkConnectionNotAvailable;
 	
 
-    public String Dialog_UpdatingWorkItems_Xpath()
+	public String txt_ConfirmationMessgageInFooter_Xpath()
+    {
+        switch (GlobalSettings.MobilePlatformToRunTest)
+        {
+            case "Windows":
+                return "";
+            case "IOS":
+                return "";
+            case "Android":
+                return "//*/android.webkit.WebView/android.view.View/android.view.View[1]/android.view.View/android.view.View";
+        }
+        return "";
+    }
+	
+	
+	
+	public String Dialog_UpdatingWorkItems_Xpath()
     {
         switch (GlobalSettings.MobilePlatformToRunTest)
         {

@@ -55,11 +55,11 @@ public class Inbox_Page extends WTAPageObject {
 	public List<MobileElement> txt_WorkItemSyncTime;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='workitemlist_noitemsavailable']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_NoWorkItemsAvailable;
 
 	@AndroidFindBy(xpath = "//*[@class='android.widget.ListView']/android.widget.Button")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement btn_LoadMore;
 	
 	
