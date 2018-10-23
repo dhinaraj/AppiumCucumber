@@ -23,11 +23,11 @@ public class ApproveWorkItemPage extends WTAPageObject {
 	public MobileElement fld_Comments;
 
 	@AndroidFindBy(xpath = "//android.widget.EditText[@text[contains(., 'Demo')]]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement text_ApprovalItemTitle;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='workitem']/android.view.View[2]/android.view.View/android.view.View[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_Comments;
 	
 

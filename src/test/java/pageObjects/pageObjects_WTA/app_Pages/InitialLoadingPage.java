@@ -16,7 +16,7 @@ public class InitialLoadingPage extends WTAPageObject  {
 
 
 	@AndroidFindBy(id = "imageView1")
-	//@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement img_InitialAppLoadingImage;
 
 

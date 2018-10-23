@@ -13,21 +13,27 @@ import io.appium.java_client.ios.IOSElement;
 public class Eula_Page extends WTAPageObject {
 	
 	@AndroidFindBy(xpath = "//*[@resource-id='viewContainer']/android.view.View[3]/android.view.View/android.widget.Button[2]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(accessibility = "Accept")
 	public MobileElement btn_Eula_Accept;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='viewContainer']/android.view.View[3]/android.view.View/android.widget.Button[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Cancel")
 	public MobileElement btn_Eula_Cancel;
 	
-	@AndroidFindBy(xpath = "//*[@text='AVEVA MASTER END USER LICENSE AGREEMENT (the “EULA”)']")
-	@iOSFindBy(xpath = "")
+	@AndroidFindBy(xpath = "//*[@text='AVEVA MASTER END USER LICENSE AGREEMENT (the ï¿½EULAï¿½)']")
+	@iOSFindBy(xpath = "//*[@text='AVEVA MASTER END USER LICENSE AGREEMENT (the ï¿½EULAï¿½)']")
 	public MobileElement txt_StartOfEula;
 	
 	
 	@AndroidFindBy(xpath = "//*[@text='5. Wonderware Development Studio and Advanced Development Studio Use and Restrictions.']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "//XCUIElementTypeStaticText[@name=\"5. Wonderware Development Studio and Advanced Development Studio Use and Restrictions.\"]")
 	public MobileElement txt_EndOfEula;
+	
+	@iOSFindBy(accessibility = "OK")
+	public MobileElement btn_AllowCameraAccess;
+	
+	@iOSFindBy(accessibility = "Allow")
+	public MobileElement btn_AllowNotifications;
 	
 
     public String AcceptBtnXpath()

@@ -26,15 +26,15 @@ public class SentItems_Page extends WTAPageObject {
 	private List<MobileElement> btn_SentItemList;
 
 	@AndroidFindBy(xpath = "(//android.widget.Button[contains(@text, 'form_')])[1]")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement workItem_Latest;
 
 	@AndroidFindBy(xpath = "//*[@resource-id='sentitemslist_noitemsavailable']")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_NoItemsAvailable;
 
 	@AndroidFindBy(xpath = "//*[@class='android.widget.ListView']/android.view.View/android.view.View/android.view.View/android.view.View")
-	@iOSFindBy(xpath = "")
+	@iOSFindBy(xpath = "Dummy")
 	public List<MobileElement> txt_SentItemsSyncTime;
 
     public String Txt_NoItemsAvailable_Xpath()

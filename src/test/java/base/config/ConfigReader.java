@@ -56,8 +56,8 @@ public class ConfigReader {
 
 
          GlobalSettings.setMobilePlatformToRunTest(config.getProperty("MobilePlatformToRunTest"));
-         GlobalSettings.setAndroidMobileAppPath("C:\\Users\\sesa473389\\Source\\Repos\\AppiumCucumber\\src\\test\\java\\base\\dataFiles\\" +config.getProperty("AndroidAPK") );
-         GlobalSettings.setIOSMobileAppPath(workingDir + "\\base\\dataFiles\\" + config.getProperty("IosApp"));
+         GlobalSettings.setAndroidMobileAppPath(System.getProperty("user.dir") + "/src/test/java/base/dataFiles/" +config.getProperty("AndroidAPK") );
+         GlobalSettings.setIOSMobileAppPath(System.getProperty("user.dir") + "/src/test/java/base/dataFiles/" + config.getProperty("IosApp"));
 
          GlobalSettings.setDeviceName(config.getProperty("DeviceName"));
 
@@ -67,7 +67,12 @@ public class ConfigReader {
          GlobalSettings.setImplcitTimeOutMax(Integer.parseInt(config.getProperty("setImplcitTimeOutMax")));
          
          GlobalSettings.setGenrateStepsSkeleton(config.getProperty("GenrateStepsSkeleton"));
-    	 
+         
+         GlobalSettings.setHttpUrl(config.getProperty("httpUrl"));
+         GlobalSettings.setHttpsUrl(config.getProperty("httpsUrl"));
+         GlobalSettings.setAzureServiceBusUrl(config.getProperty("AzureServiceBusUrl"));
+         GlobalSettings.setTestRepoName(config.getProperty("testRepoName"));
+
 
      }
 

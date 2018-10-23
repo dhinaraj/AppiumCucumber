@@ -129,7 +129,7 @@ public class DemoFillForm_Page extends WTAPageObject {
     
     public MobileElement Dropdown_AssetLocation()
     {
-    	MobileElement element = Dropdown_AssetLocation("");
+    	MobileElement element = Dropdown_AssetLocation("Dummy");
     	return element;
     }
 		

@@ -1,6 +1,7 @@
 package base.genericLib_Mob;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.openqa.selenium.By;
@@ -326,21 +327,32 @@ public class MobileAppiumFunctions {
 	}
  	
  	public static void verticalSwipeByPercentages(double startPointPercent, double endPointPercent) {
-		
-		Dimension size = MobProp.getMobDriver().manage().window().getSize();
+ 		
+    	Dimension size = MobProp.getMobDriver().manage().window().getSize();
 		int startPoint = (int) (size.height * startPointPercent);
 		int endPoint = (int) (size.height * endPointPercent);
 		
 		int anchor = size.width/2;
-
- 
-        new TouchAction(MobProp.getMobDriver())
-                .press(PointOption.point(anchor, startPoint))
-                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(0)))
-                .moveTo(PointOption.point(anchor, endPoint))
-                .release().perform();
-        
-        
+ 		switch (GlobalSettings.getMobilePlatformToRunTest())
+        {                    
+            case "Android":
+                new TouchAction(MobProp.getMobDriver())
+                        .press(PointOption.point(anchor, startPoint))
+                        .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(0)))
+                        .moveTo(PointOption.point(anchor, endPoint))
+                        .release().perform();
+                break;
+                
+            case "IOS":
+            	HashMap<String, String> scrollObject = new HashMap<String, String>();
+            	scrollObject.put("direction", "down");
+            	MobProp.getMobDriver().executeScript("mobile:scroll", scrollObject);
+            	break;
+            	
+        }
+ 		
+		
+		
 
 	}
 
