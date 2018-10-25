@@ -15,7 +15,7 @@ import io.appium.java_client.ios.IOSElement;
 
 public class Dialogs_Page extends WTAPageObject {
 	
-	
+	MenuNav_Page MenuNav_Page = new MenuNav_Page();
 
 	@AndroidFindBy(xpath = "//*[@class='android.app.Dialog']")
 	@iOSFindBy(xpath = "Dummy")
@@ -178,8 +178,8 @@ public class Dialogs_Page extends WTAPageObject {
 
         String text2 = text;*/
     	
-    	MobileAppiumFunctions.waituntilElementIsVisible(box_Dialog_ProgressBar, 5);
-    	MobileAppiumFunctions.waituntilElementIsInvisible(Dialog_UpdatingWorkItemsFlag_Xpath(), 10);
+    	//MobileAppiumFunctions.waituntilElementIsVisible(box_Dialog_ProgressBar, 10);
+    	//MobileAppiumFunctions.waituntilElementIsInvisible(Dialog_ProgressBar_Xpath(), 10);
 
 
     }
@@ -210,8 +210,9 @@ public class Dialogs_Page extends WTAPageObject {
             }
         }*/
     	
-    	MobileAppiumFunctions.waituntilElementIsVisible(box_Dialog_ProgressBar, 5);
-    	MobileAppiumFunctions.waituntilElementIsInvisible(Dialog_UpdatingWorkItemsFlag_Xpath(), 10);
+    	//MobileAppiumFunctions.waituntilElementIsVisible(box_Dialog_ProgressBar, 5);
+    	//MobileAppiumFunctions.waituntilElementIsInvisible(Dialog_UpdatingWorkItemsFlag_Xpath(), 10);
+    	MobileAppiumFunctions.waituntilElementIsVisible(MenuNav_Page.btn_HamBurgerMenu, 15);
 
     }
 

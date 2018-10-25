@@ -9,6 +9,7 @@ import java.util.List;
 import org.openqa.selenium.remote.RemoteWebElement;
 
 import base.config.GlobalSettings;
+import base.genericLib_Mob.MobCommonFunctions;
 import base.genericLib_Mob.MobileAppiumFunctions;
 import io.appium.java_client.pagefactory.*;
 import pageObjects.pageObjects_WTA.WTAPageObject;
@@ -16,6 +17,7 @@ import io.appium.java_client.ios.IOSElement;
 
 public class SentItems_Page extends WTAPageObject {
 	
+	MobCommonFunctions MobCommonFunctions = new MobCommonFunctions();
 
 	MenuNav_Page MenuNav_Page = new MenuNav_Page();
 	OverFlowIcon_Page OverFlowIcon_Page = new OverFlowIcon_Page();
@@ -62,7 +64,7 @@ public class SentItems_Page extends WTAPageObject {
 
             MenuNav_Page.btn_OverFlowIcon.click();
             sleep(500);
-            OverFlowIcon_Page.btn_OverFlowOptions.get(1);
+            OverFlowIcon_Page.btn_OverFlowClearAll.click();
             sleep(500);
             Dialogs_Page.btn_DialogOK.click();
             sleep(500);
@@ -80,5 +82,22 @@ public class SentItems_Page extends WTAPageObject {
 			e.printStackTrace();
 		}
     }
+    
+	public boolean checkIfAtleast1SentItemsExists()
+	{
+		boolean sentItemsExist=false;
+        MobCommonFunctions.LaunchApp();
+        Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
+        MenuNav_Page.btn_HamBurgerMenu.click();
+        MenuNav_Page.btn_Drafts.click();
+		if(!txt_NoItemsAvailable.isDisplayed())
+		{
+			sentItemsExist=true;
+		}
+		MobCommonFunctions.CloseApp();
+
+		return sentItemsExist;
+	}
+	
 
 }

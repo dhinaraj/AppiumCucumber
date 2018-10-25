@@ -11,6 +11,7 @@ import org.testng.Assert;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobProp;
+import base.genericLib_Mob.MobileAppiumFunctions;
 import io.appium.java_client.pagefactory.*;
 import pageObjects.pageObjects_WTA.WTAPageObject;
 import io.appium.java_client.ios.IOSElement;
@@ -29,8 +30,8 @@ public class FillForm_Page extends WTAPageObject {
 	@iOSFindBy(xpath = "Dummy")
 	public List<MobileElement> fld_FillForm_ComboBoxList;
 
-	@AndroidFindBy(xpath = "//android.widget.Button[@text='FINISH']")
-	@iOSFindBy(xpath = "//XCUIElementTypeButton[contains(., 'FINISH')]")
+	@AndroidFindBy(xpath = "//android.widget.Button[@text='Finish']")
+	@iOSFindBy(xpath = "//XCUIElementTypeButton[contains(., 'Finish')]")
 	public MobileElement btn_Finish;
 
 	@AndroidFindBy(xpath = "//android.view.View[@text='Log Off']")
@@ -78,6 +79,26 @@ public class FillForm_Page extends WTAPageObject {
                   return "";
           }
       }
+	  
+	  
+	  public MobileElement getFillFormElementByName(String FillFormName)
+      {
+
+          switch (GlobalSettings.getMobilePlatformToRunTest())
+          {
+              case "Windows":
+                  btn_FillForm_ByName = MobProp.getMobDriver().findElementByName(FillFormName);
+                  break;
+              case "IOS":
+                  btn_FillForm_ByName = MobProp.getMobDriver().findElementById(FillFormName);
+                  break;
+              case "Android":
+                  btn_FillForm_ByName = MobProp.getMobDriver().findElementByXPath("//*[@text='"+FillFormName+"']");
+                  break;
+          }
+
+         return btn_FillForm_ByName;
+      }
 
 
       public void TapOnFillFormName(String FillFormName)
@@ -97,6 +118,7 @@ public class FillForm_Page extends WTAPageObject {
           }
 
           btn_FillForm_ByName.click();
+          MobileAppiumFunctions.waituntilElementIsVisible(btn_Finish, 10);
       }
 
 
@@ -139,8 +161,7 @@ public class FillForm_Page extends WTAPageObject {
 
 
       public void SubmitEmptyFillForm()
-      {
-         
+      { 
     	  btn_Finish.click();
       }
 

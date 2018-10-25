@@ -80,8 +80,12 @@ public class ExcelHelper {
                 Iterator<Cell> cellIterator = row.cellIterator();
                 while (cellIterator.hasNext()) {
                       Cell cell = cellIterator.next();
+                      int test = cell.getRowIndex();
                       if(row.getRowNum() > 0){ //To filter column headings
                         if(cell.getColumnIndex() == col_Num){// To match column index
+                        	String firstCellContent = row.getCell(0).getStringCellValue().trim();
+                        	firstCellContent.charAt(1);
+                        	String secondCellContent = cell.getStringCellValue();
                         	LanguageDictionary.put(row.getCell(0).getStringCellValue().trim(), cell.getStringCellValue());
                         }
                     }

@@ -2,16 +2,12 @@ package stepdefinition.steps_WTA.localizationNavSteps;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.testng.Assert;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
-import base.genericLib_Mob.MobProp;
 import base.genericLib_Mob.MobileAppiumFunctions;
 import base.helpers.excelHelpers.ExcelHelper;
-import cucumber.api.Scenario;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import main.CucumberHelperTestSteps;
@@ -19,18 +15,14 @@ import main.CucumberRunner;
 import pageObjects.pageObjects_WTA.app_Pages.*;
 import pageObjects.pageObjects_WTA.localization_Pages.Loc_Account_Settings_Page;
 
-import com.google.common.io.Files;
 import com.vimalselvam.cucumber.listener.*;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.io.IOException;
+
+import pageObjects.pageObjects_WTA.formPages.*;
 
 public class LocalizationTestSteps {
 	
@@ -58,6 +50,8 @@ public class LocalizationTestSteps {
     Outbox_Page Outbox_Page = new Outbox_Page();
     OverFlowIcon_Page OverFlowIcon_Page = new OverFlowIcon_Page();
     SentItems_Page SentItems_Page = new SentItems_Page();
+    
+    LocTestingForm LocTestingForm= new LocTestingForm();
 
     
     @Then("^Validate the Localization key on Account Settings Page for '(.*)', '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
@@ -328,7 +322,7 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	AboutDic.get(Language);
-        	
+
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -809,6 +803,7 @@ public class LocalizationTestSteps {
         	String[] LangCodeAndCountry = Language.split("-");
         	FillForm_SaveAsDraft_SuccessDic.get(Language);
         	
+
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -825,21 +820,27 @@ public class LocalizationTestSteps {
             Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_FillForm.click();
+            
+            MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
+            
+            MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
+            
             FillForm_Page.TapOnFillFormName("LocTestingForm");
-            MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.box_Dialog_ProgressBar, 10);
-            //sleep(500);
+            
             FillForm_Page.btn_SaveDraft.click();
-            sleep(500);
+            
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
             ActualTranslatedStrings.put(FillForm_SaveAsDraft_Success + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
-            MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+            MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
 
-            FillForm_Page.EnterFormInput("TestName", "TestEmailgmail.com", "11/11/2001");
+            FillForm_Page.SubmitEmptyFillForm();
+
             ActualTranslatedStrings.put(FillForm_Submission_Success + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
             MobCommonFunctions.CloseApp();
    
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+
 
         }
 
@@ -860,24 +861,30 @@ public class LocalizationTestSteps {
 
 
         boolean OverAllTestResult = true;
+        
 
         MobCommonFunctions.LaunchApp();
         Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
         MenuNav_Page.btn_HamBurgerMenu.click();
         MenuNav_Page.btn_FillForm.click();
+        
+        MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
+        
+        MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
+        
         FillForm_Page.TapOnFillFormName("LocTestingForm");
-        //MobileAppiumFunctions.waitUntilElementIsVisible(FillForm_Page.btn_SaveDraft_Xpath(), 20);
-        MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.box_Dialog_ProgressBar, 10);
+
         sleep(500);
         FillForm_Page.btn_SaveDraft.click();
-        MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
         MobCommonFunctions.CloseApp();
+
 
         for ( String key : ClearAllDic.keySet() ) {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ClearAllDic.get(Language);
-        	
+
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -901,16 +908,16 @@ public class LocalizationTestSteps {
             MenuNav_Page.btn_OverFlowIcon.click();
 
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
-            ActualTranslatedStrings.put(ClearAll + "TranslatedString", OverFlowIcon_Page.btn_OverFlowOptions.get(1).getText());
+            ActualTranslatedStrings.put(ClearAll + "TranslatedString", OverFlowIcon_Page.btn_OverFlowClearAll.getText());
 
-            OverFlowIcon_Page.btn_OverFlowOptions.get(1).click();
+            OverFlowIcon_Page.btn_OverFlowClearAll.click();
             ActualTranslatedStrings.put(ClearAllErrorTitle + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(ClearAll_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
             Dialogs_Page.btn_Cancel.click();
             Drafts_Page.chkBox_OutboxListItems.get(0).click();
             MenuNav_Page.btn_OverFlowIcon.click();
-            OverFlowIcon_Page.btn_OverFlowOptions.get(0).click();
+            OverFlowIcon_Page.btn_OverFlowDeleteItems.click();
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
              MobCommonFunctions.CloseApp();
@@ -935,20 +942,27 @@ public class LocalizationTestSteps {
 
 
         boolean OverAllTestResult = true;
+        
 
         MobCommonFunctions.LaunchApp();
         Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
         MenuNav_Page.btn_HamBurgerMenu.click();
         MenuNav_Page.btn_FillForm.click();
+        MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
+        
+        MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
+        
         FillForm_Page.TapOnFillFormName("LocTestingForm");
-        FillForm_Page.EnterFormInput("TestName", "TestEmailgmail.com", "11/11/2001");
+        
+        LocTestingForm.EditFormInputAndSubmit("TestName", "TestEmail@gmail.com", "11/11/2001");
+        
         MobCommonFunctions.CloseApp();
+
 
         for ( String key : ClearAllDic.keySet() ) {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ClearAllDic.get(Language);
-        	
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -972,9 +986,9 @@ public class LocalizationTestSteps {
             MenuNav_Page.btn_OverFlowIcon.click();
 
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
-            ActualTranslatedStrings.put(ClearAll + "TranslatedString", OverFlowIcon_Page.btn_OverFlowOptions.get(1).getText());
+            ActualTranslatedStrings.put(ClearAll + "TranslatedString", OverFlowIcon_Page.btn_OverFlowClearAll.getText());
 
-            OverFlowIcon_Page.btn_OverFlowOptions.get(1).click();
+            OverFlowIcon_Page.btn_OverFlowClearAll.click();
             ActualTranslatedStrings.put(ClearAllErrorTitle + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(ClearAll_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
@@ -982,15 +996,14 @@ public class LocalizationTestSteps {
 
             Drafts_Page.chkBox_OutboxListItems.get(0).click();
             MenuNav_Page.btn_OverFlowIcon.click();
-            OverFlowIcon_Page.btn_OverFlowOptions.get(0).click();
+            OverFlowIcon_Page.btn_OverFlowDeleteItems.click();
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
              MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
-
-        }
-
+        	}
+        
         Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
     }
 
@@ -1010,13 +1023,20 @@ public class LocalizationTestSteps {
 
         boolean OverAllTestResult = true;
 
+
         MobCommonFunctions.LaunchApp();
         Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
         MenuNav_Page.btn_HamBurgerMenu.click();
         MenuNav_Page.btn_FillForm.click();
+        
+        MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
+        
+        MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01); 
+        
         FillForm_Page.TapOnFillFormName("LocTestingForm");
+        
         FillForm_Page.SubmitEmptyFillForm();
-        MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
         MenuNav_Page.btn_HamBurgerMenu.click();
         MenuNav_Page.btn_Inbox.click();
         Inbox_Page.btn_Refresh.click();
@@ -1026,23 +1046,28 @@ public class LocalizationTestSteps {
         MenuNav_Page.WaitUnitlNetworkConnectionNotAvailableMessageAppears();
         MenuNav_Page.btn_HamBurgerMenu.click();
         MenuNav_Page.btn_FillForm.click();
+        MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 5);
+        
+        MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
+        
         FillForm_Page.TapOnFillFormName("LocTestingForm");
         FillForm_Page.SubmitEmptyFillForm();
-        MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
         MenuNav_Page.btn_HamBurgerMenu.click();
         MenuNav_Page.btn_Inbox.click();
-        MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
         Inbox_Page.btn_workItemTitle.get(0).click();
         ApproveWorkItemPage.btn_Approve.click();
         Dialogs_Page.btn_DialogOK.click();
-        MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
         MobCommonFunctions.CloseApp();
+
 
         for ( String key : ClearAllDic.keySet() ) {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	ClearAllDic.get(Language);
-        	
+
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -1072,9 +1097,9 @@ public class LocalizationTestSteps {
             MenuNav_Page.btn_OverFlowIcon.click();
 
 
-            ActualTranslatedStrings.put(ClearAll + "TranslatedString", OverFlowIcon_Page.btn_OverFlowOptions.get(1).getText());
+            ActualTranslatedStrings.put(ClearAll + "TranslatedString", OverFlowIcon_Page.btn_OverFlowClearAll.getText());
 
-            OverFlowIcon_Page.btn_OverFlowOptions.get(1).click();
+            OverFlowIcon_Page.btn_OverFlowClearAll.click();
             ActualTranslatedStrings.put(ClearAllErrorTitle + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(ClearAll_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
@@ -1082,15 +1107,15 @@ public class LocalizationTestSteps {
 
             Drafts_Page.chkBox_OutboxListItems.get(0).click();
             MenuNav_Page.btn_OverFlowIcon.click();
-            OverFlowIcon_Page.btn_OverFlowOptions.get(0).click();
+            OverFlowIcon_Page.btn_OverFlowDeleteItems.click();
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
             Dialogs_Page.btn_Cancel.click();
-             MobCommonFunctions.CloseApp();
+            MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
-
+        	
         }
 
         Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
@@ -1118,6 +1143,8 @@ public class LocalizationTestSteps {
         	String[] LangCodeAndCountry = Language.split("-");
         	WorkItem_List_NoSubjectDic.get(Language);
         	
+
+        	
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -1136,13 +1163,16 @@ public class LocalizationTestSteps {
             Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_FillForm.click();
+            MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
+            
+            MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
             FillForm_Page.TapOnFillFormName("LocTestingForm");
-            FillForm_Page.EnterFormInput("TestName", "TestEmailgmail.com", "11/11/2001");
+            LocTestingForm.EditFormInputAndSubmit("TestName", "TestEmail@gmail.com", "11/11/2001");
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_SentItems.click();
             sleep(1000);
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
-            ActualTranslatedStrings.put(SecondsAgo + "TranslatedString", SentItems_Page.txt_SentItemsSyncTime.get(0).getText().split(" ")[1]);
+            ActualTranslatedStrings.put(SecondsAgo + "TranslatedString", SentItems_Page.txt_SentItemsSyncTime.get(0).getText().split(" ", 2)[1]);
 
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_Inbox.click();
@@ -1157,8 +1187,7 @@ public class LocalizationTestSteps {
                 Inbox_Page.RefreshInboxUntilFirstWorkItemTitleChanges(FirstWorkItemTitle, 5);
                 FirstWorkItemTitle = Inbox_Page.btn_workItemTitle.get(0).getText();
             }
-            Inbox_Page.btn_Refresh.click();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
+
             ActualTranslatedStrings.put(NoSubject + "TranslatedString", FirstWorkItemTitle);
             ActualTranslatedStrings.put(LoadMore + "TranslatedString", Inbox_Page.btn_LoadMore.getText());
 
@@ -1194,7 +1223,6 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	UserNameDic.get(Language);
-        	
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -1250,7 +1278,7 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	Error_NoInternetConnectivityDic.get(Language);
-        	
+
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -1274,18 +1302,20 @@ public class LocalizationTestSteps {
 
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_LogOff.click();
-            sleep(500);
             ActualTranslatedStrings.put(Error_0 + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
-            MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+
          
 
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_FillForm.click();
+            MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
+            
+            MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
             FillForm_Page.TapOnFillFormName("LocTestingForm");
             FillForm_Page.SubmitEmptyFillForm();
             sleep(500);
             ActualTranslatedStrings.put(FillForm_Submission_Queued + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
-            MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_ConfirmationMessgageInFooter, 20);
+
 
             MenuNav_Page.btn_HamBurgerMenu.click();
             MenuNav_Page.btn_Outbox.click();
@@ -1326,8 +1356,7 @@ public class LocalizationTestSteps {
         boolean OverAllTestResult = true;
 
         for ( String key : Error_99Dic.keySet() ) {
-        	if(key.equals("zh-CN"))
-        	{
+ 
 
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
@@ -1383,7 +1412,7 @@ public class LocalizationTestSteps {
   
              OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
              
-        	}
+        
 
 
         }

@@ -81,7 +81,7 @@ public class Outbox_Page extends WTAPageObject {
 
             MenuNav_Page.btn_OverFlowIcon.click();
             sleep(500);
-            OverFlowIcon_Page.btn_OverFlowOptions.get(1).click();
+            OverFlowIcon_Page.btn_OverFlowClearAll.click();
             sleep(500);
             Dialogs_Page.btn_DialogOK.click();
             sleep(500);
@@ -114,5 +114,17 @@ public class Outbox_Page extends WTAPageObject {
                 return null;
         }
     }
+    
+	public boolean checkIfAtleast1OutboxItemsExists()
+	{
+		boolean outboxItemExist=false;
+		
+		if(!txt_NoItemsAvailable.isDisplayed())
+		{
+			outboxItemExist=true;
+		}
+		
+		return outboxItemExist;
+	}
 
 }

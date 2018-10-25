@@ -56,7 +56,7 @@ public class MenuNav_Page extends WTAPageObject {
 	@iOSFindBy(id = "Flagged")
 	public MobileElement btn_Flagged;
 
-	@AndroidFindBy(xpath = "\"//*[@text[contains(.,'NavigationMenu_FillForms')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
+	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_FillForms')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
 	@iOSFindBy(xpath = "//XCUIElementTypeStaticText[text()='Fill Form']/..")
 	public MobileElement btn_FillForm;
 
