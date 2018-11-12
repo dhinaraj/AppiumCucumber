@@ -31,7 +31,9 @@ import hooks.TestInitializeHook;
 		plugin = {"com.vimalselvam.cucumber.listener.ExtentCucumberFormatter:"},
 		//plugin = {"pretty", "html:target/cucumber-html-report"},
 		//dryRun=true)
-		tags={"@ReadyForBuild"})
+		//tags={"@ReadyForBuild"})
+		//tags={"@ReadyForBuild" , "@IOS"})
+		tags={"@TestingNow"})
 
 public class CucumberRunner extends AbstractTestNGCucumberTests {
 	

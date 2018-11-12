@@ -385,11 +385,12 @@ public class TestInitializeHook {
                 //IOSCapabilities.setCapability("fullReset", true);
                 IOSCapabilities.setCapability("newCommandTimeout", 300);
                 //IOSCapabilities.setCapability("report.disable", true);
-                IOSCapabilities.setCapability("maxTypingFrequency ", 60);
+                IOSCapabilities.setCapability("maxTypingFrequency ", 30);
                 //IOSCapabilities.setCapability("language", "de");
                 //IOSCapabilities.setCapability("locales", "de_DE");
                 IOSCapabilities.setCapability("app", GlobalSettings.getIOSMobileAppPath());
                 //IOSCapabilities.setCapability("simpleIsVisibleCheck", true);
+                //IOSCapabilities.setCapability("sendKeyStrategy", "setValue");
                 
                 try
                 {

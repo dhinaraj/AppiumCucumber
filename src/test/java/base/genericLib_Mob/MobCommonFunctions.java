@@ -6,12 +6,14 @@ import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.PageFactory;
 
 import base.config.GlobalSettings;
 import hooks.TestInitializeHook;
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileCommand;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
@@ -186,7 +188,22 @@ public class MobCommonFunctions {
 		
 			//Android Command to Reset App
 			//RunCmdCommand("adb shell pm clear com.schneiderelectric.worktaskspro");
+		
+
+		switch (GlobalSettings.getMobilePlatformToRunTest()) {
+		case "Windows":
+			
+			break;
+		case "IOS":
+			UninstallApp();
+			InstallApp();
+			break;
+		case "Android":
 			MobProp.getMobDriver().resetApp();
+			break;
+		}
+
+		
 
 		
 	}
@@ -200,5 +217,18 @@ public class MobCommonFunctions {
 			e.printStackTrace();
 		}
     }
+    
+    public void hideKeyboardOnIOS()
+    {
+    	if(GlobalSettings.getMobilePlatformToRunTest().equals("IOS"))
+        {
+      	  MobProp.getMobDriver().findElement(By.id("Done")).click();
+        }
+    }
+    
+    
+    
+    
+
 
 }

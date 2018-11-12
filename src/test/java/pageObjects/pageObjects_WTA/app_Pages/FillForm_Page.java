@@ -6,6 +6,7 @@ import io.appium.java_client.android.AndroidElement;
 
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.testng.Assert;
 
@@ -18,9 +19,21 @@ import io.appium.java_client.ios.IOSElement;
 
 public class FillForm_Page extends WTAPageObject {
 	
-	
+	MenuNav_Page MenuNav_Page = new MenuNav_Page();
 
 	public MobileElement btn_FillForm_ByName;
+	
+	@AndroidFindBy(xpath = "//*[@text='Menu']")
+	@iOSFindBy(accessibility = "Menu")
+	public MobileElement btn_HamBurgerMenu;
+	
+	@AndroidFindBy(xpath = "//android.widget.EditText")
+	@iOSFindBy(xpath = "//XCUIElementTypeButton[@name[contains(.,'fillform')]]")
+	public List<MobileElement> fillFormsList;
+	
+	@AndroidFindBy(xpath = "//android.widget.EditText")
+	@iOSFindBy(xpath = "//XCUIElementTypeOther[@name[contains(.,'fillform')]]/XCUIElementTypeOther[1]")
+	public List<MobileElement> fillFormsTitle;
 	
 	@AndroidFindBy(xpath = "//android.widget.EditText")
 	@iOSFindBy(xpath = "Dummy")
@@ -31,7 +44,7 @@ public class FillForm_Page extends WTAPageObject {
 	public List<MobileElement> fld_FillForm_ComboBoxList;
 
 	@AndroidFindBy(xpath = "//android.widget.Button[@text='Finish']")
-	@iOSFindBy(xpath = "//XCUIElementTypeButton[contains(., 'Finish')]")
+	@iOSFindBy(id = "Finish")
 	public MobileElement btn_Finish;
 
 	@AndroidFindBy(xpath = "//android.view.View[@text='Log Off']")
@@ -110,7 +123,7 @@ public class FillForm_Page extends WTAPageObject {
                   btn_FillForm_ByName = MobProp.getMobDriver().findElementByName(FillFormName);
                   break;
               case "IOS":
-                  btn_FillForm_ByName = MobProp.getMobDriver().findElementById(FillFormName);
+                  btn_FillForm_ByName = findClickableButtonUsingFormNameforIOS(FillFormName);
                   break;
               case "Android":
                   btn_FillForm_ByName = MobProp.getMobDriver().findElementByXPath("//*[@text='"+FillFormName+"']");
@@ -120,6 +133,41 @@ public class FillForm_Page extends WTAPageObject {
           btn_FillForm_ByName.click();
           MobileAppiumFunctions.waituntilElementIsVisible(btn_Finish, 10);
       }
+      
+      
+      public MobileElement findClickableButtonUsingFormNameforIOS(String FillFormName)
+      {
+      	MobileElement clickbaleFillFormButtonElement = null;
+      	
+      	int elementNumber = 0;
+      	boolean fillFormFound = false;
+      	
+      	int numberOffillFormPresent = fillFormsTitle.size();
+
+      	for(int i=0; i<numberOffillFormPresent;i++)
+      	{
+      		switch (GlobalSettings.getMobilePlatformToRunTest())
+              {
+                  case "IOS":
+                  	if(fillFormsTitle.get(i).getAttribute("name").equals(FillFormName))
+              		{
+              			elementNumber= i+1;
+              			fillFormFound=true;
+              			clickbaleFillFormButtonElement = MobProp.getMobDriver().findElement(By.xpath("(//XCUIElementTypeButton[@name[contains(.,'fillform')]])[" +elementNumber+"]"));
+              			break;
+              		}
+
+              }
+      		
+      		if(fillFormFound)
+      		{
+      			break;
+      		}
+      	}
+      	
+      	return clickbaleFillFormButtonElement;
+
+      	}
 
 
       public void SampleToClickOnAnElementUsingLocationAtrribute(String Name, String EmailID, String DOB)
@@ -163,6 +211,8 @@ public class FillForm_Page extends WTAPageObject {
       public void SubmitEmptyFillForm()
       { 
     	  btn_Finish.click();
+    	  MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+    	  
       }
 
       public void EditFormInput(String Name, String EmailID, String DOB)

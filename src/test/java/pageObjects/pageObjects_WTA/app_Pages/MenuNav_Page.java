@@ -2,45 +2,43 @@ package pageObjects.pageObjects_WTA.app_Pages;
 
 
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidElement;
 
-import java.util.List;
-
-import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.StaleElementReferenceException;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobProp;
 import base.genericLib_Mob.MobileAppiumFunctions;
 import io.appium.java_client.pagefactory.*;
 import pageObjects.pageObjects_WTA.WTAPageObject;
-import io.appium.java_client.ios.IOSElement;
 
 public class MenuNav_Page extends WTAPageObject {
 	
-	Dialogs_Page Dialogs_Page = new Dialogs_Page();
+
 	
 	@AndroidFindBy(xpath = "//*[@text='Menu']")
-	@iOSFindBy(accessibility = "Menu")
+	@iOSFindBy(id = "Menu")
 	public MobileElement btn_HamBurgerMenu;
 
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Home')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
-	@iOSFindBy(xpath = "//*[@id='Home']/../..")
+	@iOSFindBy(xpath = "NavigationMenu_Home")
 	public MobileElement btn_Home;
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Inbox')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
-	@iOSFindBy(xpath = "//*[@id='Inbox']/../..")
+	@iOSFindBy(id = "NavigationMenu_Inbox")
 	public MobileElement btn_Inbox;
 
 	@AndroidFindBy(xpath = "//android.widget.ListView[@resource-id[contains(.,'select_')]]")
-	@iOSFindBy(xpath = "//*[@id='Refresh']/preceding-sibling::*[1]")
+	@iOSFindBy(xpath = "//XCUIElementTypeOther[@name=\"banner\"]/XCUIElementTypeOther[1]/XCUIElementTypeOther")
 	public MobileElement btn_Inbox_Dropdown;
 
 	@AndroidFindBy(xpath = "(//*[@resource-id[contains(.,'select_option_')]])[1]")
+	//@iOSFindBy(xpath = "//XCUIElementTypeOther[@name=\"Work Tasks Pro\"]/XCUIElementTypeOther[6]")
 	@iOSFindBy(id = "All Items")
 	public MobileElement btn_AllItems;
 
 	@AndroidFindBy(xpath = "(//*[@resource-id[contains(.,'select_option_')]])[2]")
+	//@iOSFindBy(xpath = "//XCUIElementTypeOther[@name=\"Work Tasks Pro\"]/XCUIElementTypeOther[7]")
 	@iOSFindBy(id = "Approval")
 	public MobileElement btn_Approval;
 
@@ -57,15 +55,15 @@ public class MenuNav_Page extends WTAPageObject {
 	public MobileElement btn_Flagged;
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_FillForms')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
-	@iOSFindBy(xpath = "//XCUIElementTypeStaticText[text()='Fill Form']/..")
+	@iOSFindBy(id = "NavigationMenu_FillForms")
 	public MobileElement btn_FillForm;
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Drafts')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
-	@iOSFindBy(xpath = "//*[@id='Drafts']/../..")
+	@iOSFindBy(id = "NavigationMenu_Drafts")
 	public MobileElement btn_Drafts;
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_SentItems')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
-	@iOSFindBy(xpath = "//*[@id='Sent Items']/../..")
+	@iOSFindBy(id = "NavigationMenu_SentItems")
 	public MobileElement btn_SentItems;
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Outbox')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
@@ -73,7 +71,7 @@ public class MenuNav_Page extends WTAPageObject {
 	public MobileElement btn_Outbox;
 
 	@AndroidFindBy(xpath = "//*[@text[contains(.,'NavigationMenu_Sync')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View']")
-	@iOSFindBy(id = "Refresh")
+	@iOSFindBy(id = "NavigationMenu_Sync")
 	public MobileElement btn_Sync;
 
 	@AndroidFindBy(xpath = "(//*[@text[contains(.,'NavigationMenu_Settings')]]//*[@class='android.view.View']//*[@class='android.view.View']//*[@class='android.view.View'])[1]")
@@ -210,25 +208,101 @@ public class MenuNav_Page extends WTAPageObject {
          }
      }
      
-     public void WaitUnitlNetworkConnectionNotAvailableMessageAppears()
+     
+     public void clickOnHamBurgerMenu()
      {
-         switch (GlobalSettings.getMobilePlatformToRunTest())
+         boolean clickedOnHamburgerMenuSuccesully = false;
+         int i=1;
+    	 while(!clickedOnHamburgerMenuSuccesully)
          {
-             case "Windows":
-                 String Text = Dialogs_Page.txt_NetworkConnectionNotAvailable.getText();
-                 System.out.println("Found text " + Text);
-                 break;
-             default:
-            	 MobileAppiumFunctions.waituntilElementIsVisible(Dialogs_Page.txt_NetworkConnectionNotAvailable, 20);
-                 break;
+        	try {
+				btn_HamBurgerMenu.click();
+				clickedOnHamburgerMenuSuccesully=true;
+			} 
+        	catch (Exception e) {
+				System.out.println("Caught Stale Element Expection, Retrying to click on Hamburger Menu");
+			} 
+        	if(i==5)
+        	{
+        		System.out.println("Retried to click 5 times on Hamburger Menu, but failed, check the elements");
+        		break;
+        	}
+        	i++;
          }
      }
+     
+     public void waitUnitlHamburgerMenuIsClickable()
+     {
+         boolean hamBurgerMenuIsClickable = false;
+         int i=1;
+    	 while(!hamBurgerMenuIsClickable)
+         {
+        	try {
+        		MobileAppiumFunctions.waituntilElementIsVisible(btn_HamBurgerMenu, 15);
+        		hamBurgerMenuIsClickable=true;
+			} 
+        	catch (Exception e) {
+				System.out.println("Caught Stale Element Expection, Retrying to click on Hamburger Menu");
+			} 
+        	
+        	if(i==5)
+        	{
+        		System.out.println("Retried to click 5 times on Hamburger Menu, but failed, check the elements");
+        		break;
+        	}
+        	i++;
+         }
+     }
+     
+     
+     public void navigateToMenuOption(String menuName)
+     {
+    	 btn_HamBurgerMenu.click();
+    	 
+    	 if(menuName.equals("Inbox"))
+    	 {
+    		 btn_Inbox.click();
+    	 }
+    	 if(menuName.equals("Fill Form"))
+    	 {
+    		 btn_FillForm.click();
+    	 }
+    	 if(menuName.equals("Drafts"))
+    	 {
+    		 btn_Drafts.click();
+    	 }
+    	 if(menuName.equals("Sent Items"))
+    	 {
+    		btn_SentItems.click();
+    	 }
+    	 if(menuName.equals("Outbox"))
+    	 {
+    		 btn_Outbox.click();
+    	 }
+    	 if(menuName.equals("Sync"))
+    	 {
+    		 btn_Sync.click();
+    	 }
+    	 if(menuName.equals("Manage Account"))
+    	 {
+    		 btn_AccountSettings.click();
+    	 }
+    	 if(menuName.equals("Settings"))
+    	 {	btn_AppSettings.click();
+    		 
+    	 }
+    	 if(menuName.equals("Help"))
+    	 {
+    		 btn_Help.click();
+    	 }
+    	 if(menuName.equals("Log Off"))
+    	 {
+    		 btn_LogOff.click();
+    	 }
+     }
+     
 
      
-     public void WaitUnitlNetworkConnectionNotAvailableMessageDisAppears()
-     {
 
-    	 MobileAppiumFunctions.waituntilElementIsNoLongerInDom(Dialogs_Page.txt_NetworkConnectionNotAvailable, 15);
-     }
 
 }

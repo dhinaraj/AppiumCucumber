@@ -2,21 +2,22 @@ package pageObjects.pageObjects_WTA.app_Pages;
 
 
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidElement;
-import org.openqa.selenium.remote.RemoteWebElement;
+
+import org.openqa.selenium.By;
 
 import base.config.GlobalSettings;
-import base.genericLib_Mob.MobCommonFunctions;
+import base.genericLib_Mob.MobProp;
 import base.genericLib_Mob.MobileAppiumFunctions;
+import hooks.TestInitializeHook;
 import io.appium.java_client.pagefactory.*;
 import pageObjects.pageObjects_WTA.WTAPageObject;
-import pageObjects.pageObjects_WTA.localization_Pages.Loc_Account_Settings_Page;
-import io.appium.java_client.ios.IOSElement;
 
 public class Dialogs_Page extends WTAPageObject {
 	
-	MenuNav_Page MenuNav_Page = new MenuNav_Page();
-
+	@AndroidFindBy(xpath = "//*[@text='Menu']")
+	@iOSFindBy(accessibility = "Menu")
+	public MobileElement btn_HamBurgerMenu;
+	
 	@AndroidFindBy(xpath = "//*[@class='android.app.Dialog']")
 	@iOSFindBy(xpath = "Dummy")
 	public MobileElement box_Dialog_Loader;
@@ -63,7 +64,7 @@ public class Dialogs_Page extends WTAPageObject {
             case "IOS":
                 return "";
             case "Android":
-                return "//*/android.webkit.WebView/android.view.View/android.view.View[1]/android.view.View/android.view.View";
+            	return "//*/android.webkit.WebView/android.view.View/android.view.View[1]/android.view.View/android.view.View";
         }
         return "";
     }
@@ -149,6 +150,23 @@ public class Dialogs_Page extends WTAPageObject {
     }
     
     
+    public String backButtonXPathWhenFooterMessageIsDisplayed()
+    {
+        switch (GlobalSettings.getMobilePlatformToRunTest())
+        {
+
+            case "Windows":
+                return "";
+            case "IOS":
+                return "";
+            case "Android":
+                return "//*/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View/android.view.View/android.view.View/android.widget.Button[@text='Back']";
+
+        }
+        return "";
+    }
+    
+    
     public void WaitUnitlUpdateWorkItemDialogDisappears()
     {
     	/*        String text = "";
@@ -178,9 +196,9 @@ public class Dialogs_Page extends WTAPageObject {
 
         String text2 = text;*/
     	
-    	//MobileAppiumFunctions.waituntilElementIsVisible(box_Dialog_ProgressBar, 10);
+    	MobileAppiumFunctions.waituntilElementIsVisible(box_Dialog_ProgressBar, 20);
     	//MobileAppiumFunctions.waituntilElementIsInvisible(Dialog_ProgressBar_Xpath(), 10);
-
+    	//MobileAppiumFunctions.waituntilElementIsVisible(btn_HamBurgerMenu, 15);
 
     }
 
@@ -212,8 +230,60 @@ public class Dialogs_Page extends WTAPageObject {
     	
     	//MobileAppiumFunctions.waituntilElementIsVisible(box_Dialog_ProgressBar, 5);
     	//MobileAppiumFunctions.waituntilElementIsInvisible(Dialog_UpdatingWorkItemsFlag_Xpath(), 10);
-    	MobileAppiumFunctions.waituntilElementIsVisible(MenuNav_Page.btn_HamBurgerMenu, 15);
+    	MobileAppiumFunctions.waituntilElementIsVisible(btn_HamBurgerMenu, 15);
 
+    }
+    
+    public void WaitUnitlNetworkConnectionNotAvailableMessageAppears()
+    {
+        switch (GlobalSettings.getMobilePlatformToRunTest())
+        {
+            case "Windows":
+                String Text = txt_NetworkConnectionNotAvailable.getText();
+                System.out.println("Found text " + Text);
+                break;
+            default:
+           	 MobileAppiumFunctions.waituntilElementIsVisible(txt_NetworkConnectionNotAvailable, 30);
+                break;
+        }
+    }
+    
+    
+    public void WaitUnitlBottomFooterMessageDisappears() throws InterruptedException
+    {
+    	TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 2);
+
+    	boolean bottomFooterElementVisible = true;
+    	while(bottomFooterElementVisible) {
+    		try {
+				MobileElement element = MobProp.getMobDriver().findElement(By.xpath(backButtonXPathWhenFooterMessageIsDisplayed()));
+				Thread.sleep(5000);
+    		} catch (Exception e) {
+				bottomFooterElementVisible=false;
+				System.out.println("Footer Message Disappeared");
+			}
+    	}
+    	TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
+    }
+    
+    public void WaitUnitlNetworkConnectionNotAvailableMessageDisAppears()
+    {
+    	
+    	TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 2);
+
+    	boolean netWorkNotAvailableMessageIsVisible= true;
+    	while(netWorkNotAvailableMessageIsVisible) {
+    		try {
+				MobileElement element = MobProp.getMobDriver().findElement(By.xpath(Lbl_NetworkConnectionNotAvailableXpath()));
+				Thread.sleep(500);
+    		} catch (Exception e) {
+    			netWorkNotAvailableMessageIsVisible=false;
+				System.out.println("Network Not Available Message Disappeared");
+			}
+    	}
+    	TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
+
+   	 //MobileAppiumFunctions.waituntilElementIsNoLongerInDom(txt_NetworkConnectionNotAvailable, 60);
     }
 
 

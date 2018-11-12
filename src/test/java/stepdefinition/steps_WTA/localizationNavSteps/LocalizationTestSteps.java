@@ -51,7 +51,7 @@ public class LocalizationTestSteps {
     OverFlowIcon_Page OverFlowIcon_Page = new OverFlowIcon_Page();
     SentItems_Page SentItems_Page = new SentItems_Page();
     
-    LocTestingForm LocTestingForm= new LocTestingForm();
+    FormWithInputs FormWithInputs= new FormWithInputs();
 
     
     @Then("^Validate the Localization key on Account Settings Page for '(.*)', '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
@@ -109,7 +109,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Logon + "TranslatedString", Loc_Account_Settings_Page.btn_LogOn.getText());
             
             MobCommonFunctions.CloseApp();
-            OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+            OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         }
             Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
 
@@ -152,8 +152,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemFlagDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
 
 
@@ -167,7 +167,7 @@ public class LocalizationTestSteps {
 
             MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         }
             Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
         
@@ -220,8 +220,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
 
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
             ActualTranslatedStrings.put(Inbox + "TranslatedString", MenuNav_Page.btn_Inbox.getText());
@@ -237,7 +237,7 @@ public class LocalizationTestSteps {
             MobCommonFunctions.CloseApp();
 
    
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -279,7 +279,7 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.btn_Inbox_Dropdown.click();
             
 
@@ -293,7 +293,7 @@ public class LocalizationTestSteps {
 
             MobCommonFunctions.CloseApp();
    
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -341,8 +341,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
@@ -363,7 +363,7 @@ public class LocalizationTestSteps {
             MobCommonFunctions.CloseApp();
 
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -402,8 +402,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
@@ -418,7 +418,7 @@ public class LocalizationTestSteps {
 
             MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -460,8 +460,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
@@ -480,7 +480,7 @@ public class LocalizationTestSteps {
             MobCommonFunctions.CloseApp();
 
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -534,8 +534,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AppSettings.click();
             sleep(1000);
 
@@ -567,7 +567,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(ItemsToSyncDataAndLookUp + "TranslatedString", AppSettings_Page.txt_ItemsToSyncForLookupAndData.getText());
             MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -636,7 +636,7 @@ public class LocalizationTestSteps {
             Dialogs_Page.btn_DialogOK.click();
             ActualTranslatedStrings.put(ApproveSuccessMessage + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
             
-            MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
+            Dialogs_Page.WaitUnitlBottomFooterMessageDisappears();
 
             //Navigate to Reject Confirmation Page
             Inbox_Page.clickOnWorkItemContainingTitle("Recipe has been successfully updated");
@@ -653,7 +653,7 @@ public class LocalizationTestSteps {
              MobCommonFunctions.CloseApp();
      
    
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
         Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
@@ -712,7 +712,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Remove + "TranslatedString", InformationWorkItemPage.btn_Remove.getText());
              MobCommonFunctions.CloseApp();
 
-            OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+            OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
              
         }
@@ -766,21 +766,21 @@ public class LocalizationTestSteps {
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
             ActualTranslatedStrings.put(WorkItem_List_NoItemsAvailable + "TranslatedString", Inbox_Page.txt_NoWorkItemsAvailable.getText());
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Drafts.click();
             ActualTranslatedStrings.put(Drafts_List_NoItemsAvailable + "TranslatedString", Drafts_Page.txt_NoItemsAvailable.getText());
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Outbox.click();
             ActualTranslatedStrings.put(Outbox_List_NoItemsAvailable + "TranslatedString", Outbox_Page.txt_NoItemsAvailable.getText());
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_SentItems.click();
             ActualTranslatedStrings.put(SentItems_List_NoItemsAvailable + "TranslatedString", SentItems_Page.txt_NoItemsAvailable.getText());
             MobCommonFunctions.CloseApp();
 
             
-            OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+            OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -817,8 +817,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_FillForm.click();
             
             MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
@@ -831,7 +831,7 @@ public class LocalizationTestSteps {
             
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
             ActualTranslatedStrings.put(FillForm_SaveAsDraft_Success + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
-            MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
+            Dialogs_Page.WaitUnitlBottomFooterMessageDisappears();
 
             FillForm_Page.SubmitEmptyFillForm();
 
@@ -839,7 +839,7 @@ public class LocalizationTestSteps {
 
             MobCommonFunctions.CloseApp();
    
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
 
         }
@@ -864,8 +864,8 @@ public class LocalizationTestSteps {
         
 
         MobCommonFunctions.LaunchApp();
-        Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-        MenuNav_Page.btn_HamBurgerMenu.click();
+        MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+        MenuNav_Page.clickOnHamBurgerMenu();
         MenuNav_Page.btn_FillForm.click();
         
         MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
@@ -876,7 +876,7 @@ public class LocalizationTestSteps {
 
         sleep(500);
         FillForm_Page.btn_SaveDraft.click();
-        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
+        Dialogs_Page.WaitUnitlBottomFooterMessageDisappears();
         MobCommonFunctions.CloseApp();
 
 
@@ -901,8 +901,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Drafts.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
@@ -922,7 +922,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
              MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -945,8 +945,8 @@ public class LocalizationTestSteps {
         
 
         MobCommonFunctions.LaunchApp();
-        Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-        MenuNav_Page.btn_HamBurgerMenu.click();
+        MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+        MenuNav_Page.clickOnHamBurgerMenu();
         MenuNav_Page.btn_FillForm.click();
         MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
         
@@ -954,7 +954,7 @@ public class LocalizationTestSteps {
         
         FillForm_Page.TapOnFillFormName("LocTestingForm");
         
-        LocTestingForm.EditFormInputAndSubmit("TestName", "TestEmail@gmail.com", "11/11/2001");
+        FormWithInputs.enterFormInputAndSubmit("TestName", "TestEmail@gmail.com", "11/11/2001");
         
         MobCommonFunctions.CloseApp();
 
@@ -979,8 +979,8 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_SentItems.click();
             sleep(1000);
             MenuNav_Page.btn_OverFlowIcon.click();
@@ -1001,7 +1001,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
              MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         	}
         
         Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
@@ -1025,8 +1025,8 @@ public class LocalizationTestSteps {
 
 
         MobCommonFunctions.LaunchApp();
-        Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-        MenuNav_Page.btn_HamBurgerMenu.click();
+        MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+        MenuNav_Page.clickOnHamBurgerMenu();
         MenuNav_Page.btn_FillForm.click();
         
         MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
@@ -1036,30 +1036,30 @@ public class LocalizationTestSteps {
         FillForm_Page.TapOnFillFormName("LocTestingForm");
         
         FillForm_Page.SubmitEmptyFillForm();
-        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
-        MenuNav_Page.btn_HamBurgerMenu.click();
+        Dialogs_Page.WaitUnitlBottomFooterMessageDisappears();
+        MenuNav_Page.clickOnHamBurgerMenu();
         MenuNav_Page.btn_Inbox.click();
         Inbox_Page.btn_Refresh.click();
-        Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
+        MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
 
         MobCommonFunctions.SwitchToOfflineMode();
-        MenuNav_Page.WaitUnitlNetworkConnectionNotAvailableMessageAppears();
-        MenuNav_Page.btn_HamBurgerMenu.click();
+        Dialogs_Page.WaitUnitlNetworkConnectionNotAvailableMessageAppears();
+        MenuNav_Page.clickOnHamBurgerMenu();
         MenuNav_Page.btn_FillForm.click();
-        MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 5);
+        MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
         
         MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
         
         FillForm_Page.TapOnFillFormName("LocTestingForm");
         FillForm_Page.SubmitEmptyFillForm();
-        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
-        MenuNav_Page.btn_HamBurgerMenu.click();
+        Dialogs_Page.WaitUnitlBottomFooterMessageDisappears();
+        MenuNav_Page.clickOnHamBurgerMenu();
         MenuNav_Page.btn_Inbox.click();
-        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
+        MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
         Inbox_Page.btn_workItemTitle.get(0).click();
         ApproveWorkItemPage.btn_Approve.click();
         Dialogs_Page.btn_DialogOK.click();
-        MobileAppiumFunctions.waituntilElementIsInvisible(Dialogs_Page.txt_ConfirmationMessgageInFooter_Xpath(), 5);
+        MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
         MobCommonFunctions.CloseApp();
 
 
@@ -1087,7 +1087,7 @@ public class LocalizationTestSteps {
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Outbox.click();
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
             ActualTranslatedStrings.put(Outbox_List_SubHeader_FillForms + "TranslatedString", Outbox_Page.txt_FillForms_Header.getText());
@@ -1114,7 +1114,7 @@ public class LocalizationTestSteps {
             Dialogs_Page.btn_Cancel.click();
             MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         	
         }
 
@@ -1160,23 +1160,23 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_FillForm.click();
             MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
             
             MobileAppiumFunctions.verticalSwipeByPercentages(0.8, 0.01);
             FillForm_Page.TapOnFillFormName("LocTestingForm");
-            LocTestingForm.EditFormInputAndSubmit("TestName", "TestEmail@gmail.com", "11/11/2001");
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            FormWithInputs.enterFormInputAndSubmit("TestName", "TestEmail@gmail.com", "11/11/2001");
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_SentItems.click();
             sleep(1000);
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
             ActualTranslatedStrings.put(SecondsAgo + "TranslatedString", SentItems_Page.txt_SentItemsSyncTime.get(0).getText().split(" ", 2)[1]);
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Inbox.click();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
 
             if (Inbox_Page.CheckIfFirstWorkItemPresent())
             {
@@ -1189,10 +1189,12 @@ public class LocalizationTestSteps {
             }
 
             ActualTranslatedStrings.put(NoSubject + "TranslatedString", FirstWorkItemTitle);
+            Inbox_Page.btn_Refresh.click();
             ActualTranslatedStrings.put(LoadMore + "TranslatedString", Inbox_Page.btn_LoadMore.getText());
+           
 
              MobCommonFunctions.CloseApp();
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -1215,7 +1217,7 @@ public class LocalizationTestSteps {
 
         //Navigate to the Page and Verify
         MobCommonFunctions.LaunchApp();
-        Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
+        MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
         LogOff_In_Page.LogOff();
         MobCommonFunctions.CloseApp();
 
@@ -1256,7 +1258,7 @@ public class LocalizationTestSteps {
 
 
              MobCommonFunctions.CloseApp();
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
         Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
@@ -1278,7 +1280,9 @@ public class LocalizationTestSteps {
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	Error_NoInternetConnectivityDic.get(Language);
-
+        	
+        	if(key.equals("en-US") || key.equals("zh-CN" ))
+        	{
         	String fileName = LangCodeAndCountry[0]+ "_" + LangCodeAndCountry[1] + getTextFileName();
         	PrintWriter writer  = getFileWriter(fileName);
 
@@ -1294,19 +1298,19 @@ public class LocalizationTestSteps {
 
             //Navigate to the Page and Verify
             MobCommonFunctions.LaunchApp();
-            Dialogs_Page.WaitUnitlUpdateWorkItemDialogDisappears();
+            MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MobCommonFunctions.SwitchToOfflineMode();
-            MenuNav_Page.WaitUnitlNetworkConnectionNotAvailableMessageAppears();
+            Dialogs_Page.WaitUnitlNetworkConnectionNotAvailableMessageAppears();
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
             ActualTranslatedStrings.put(Error_NoInternetConnectivity + "TranslatedString", Dialogs_Page.txt_NetworkConnectionNotAvailable.getText());
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_LogOff.click();
             ActualTranslatedStrings.put(Error_0 + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
          
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_FillForm.click();
             MobileAppiumFunctions.waituntilElementIsVisible(FillForm_Page.getFillFormElementByName("LocTestingForm"), 10);
             
@@ -1317,26 +1321,20 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(FillForm_Submission_Queued + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
 
-            MenuNav_Page.btn_HamBurgerMenu.click();
+            MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Outbox.click();
             MobCommonFunctions.SwitchToOnlineMode();
 
-            try
-            {
-                MenuNav_Page.WaitUnitlNetworkConnectionNotAvailableMessageDisAppears();
-            }
-            catch (Exception e)
-            {
-                Outbox_Page.OpenFirstFormFromOutbox();
-                MenuNav_Page.btn_Back.click();
-            }
+
+            Dialogs_Page.WaitUnitlNetworkConnectionNotAvailableMessageDisAppears();
 
             Outbox_Page.OpenFirstFormFromOutbox();
             sleep(500);
             ActualTranslatedStrings.put(Error_Outbox_CannotViewIfAccountOnline + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
              MobCommonFunctions.CloseApp();
 
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+        	}
 
         }
 
@@ -1410,7 +1408,7 @@ public class LocalizationTestSteps {
              MobCommonFunctions.CloseApp();
 
   
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
              
         
 
@@ -1459,7 +1457,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Eula_Cancel + "TranslatedString", Eula_Page.btn_Eula_Cancel.getText());
 
              MobCommonFunctions.CloseApp();
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -1518,7 +1516,7 @@ public class LocalizationTestSteps {
 
              MobCommonFunctions.CloseApp();
    
-             OverAllTestResult = compareExpectedAndActualStrings(ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
+             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
 
@@ -1536,9 +1534,9 @@ public class LocalizationTestSteps {
     }
     
     
-    private boolean compareExpectedAndActualStrings(Map<String, String> ExpectedTranslatedStrings, Map<String, String> ActualTranslatedStrings, String Language, PrintWriter writer, String fileName) throws IOException
+    private boolean compareExpectedAndActualStrings(boolean OverAllTestResult, Map<String, String> ExpectedTranslatedStrings, Map<String, String> ActualTranslatedStrings, String Language, PrintWriter writer, String fileName) throws IOException
     {
-    	boolean OverAllTestResult = true;
+    	boolean currentComparisionResult = true;
     	
     	
 		writer.println("Checking Translation For: " + Language);
@@ -1550,29 +1548,33 @@ public class LocalizationTestSteps {
 
             if (ExpectedString.equals(ActualString))
             {
-            	
-            	//Reporter.addStepLog("Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
             	writer.println("Passed --- " + "Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
-
-
             }
             else
             {
-
-            	//Reporter.addStepLog("!!!!!String Mismatch!!!!! ---- " +"Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
+            		
             	writer.println("Failed --- " + "Expected String: " + ExpectedString + "-----" + "Actual String: " + ActualString);
-                OverAllTestResult = false;
+            	currentComparisionResult = false;
+
             }
 
         }
-        
-        
+
         writer.close();
         
+        if(!currentComparisionResult)
+        {
+        	Reporter.addStepLog("Expected Translated Strings Failed for Language - " + Language + ". Please check attachment");
+        	OverAllTestResult = currentComparisionResult;
+        }
+        else
+        {
+        	Reporter.addStepLog("Expected Translated Strings Passed for Language - " + Language);
+        }
         
         Reporter.addScreenCaptureFromPath("../" + CucumberRunner.cucumberRelativeReportPath +"/screenshots/" + fileName);
 
-		return OverAllTestResult;
+        return OverAllTestResult;
     	
     }
     

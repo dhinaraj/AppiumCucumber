@@ -2,7 +2,7 @@ package stepdefinition.steps_WTA.generaNavSteps;
 
 import base.genericLib_Mob.MobCommonFunctions;
 import cucumber.api.java.en.Then;
-import stepdefinition.steps_WTA.mobileAppNavFunctions.*;
+
 
 public class TurnOnOffInternetSteps {
 	

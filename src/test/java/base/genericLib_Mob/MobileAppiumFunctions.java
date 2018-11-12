@@ -24,10 +24,11 @@ import io.appium.java_client.touch.offset.PointOption;
 public class MobileAppiumFunctions {
 	
 	
-	 public static boolean isElementPresent(MobileElement element)
+	 public static boolean isElementClickable(MobileElement element , int seconds)
      {
          boolean foundElement = false;
-         WebDriverWait wait = new WebDriverWait(MobProp.getMobDriver(), 3);
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), seconds);
+         WebDriverWait wait = new WebDriverWait(MobProp.getMobDriver(), seconds);
          try
          {
              wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -37,14 +38,33 @@ public class MobileAppiumFunctions {
          {
              foundElement = false;
          }
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
+         return foundElement;
+     }
+	 
+	 public static boolean isElementPresent(MobileElement element , int seconds)
+     {
+         boolean foundElement = false;
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), seconds);
+         WebDriverWait wait = new WebDriverWait(MobProp.getMobDriver(), seconds);
+         try
+         {
+             wait.until(ExpectedConditions.visibilityOf(element));
+             foundElement = true;
+         }
+         catch (WebDriverException eTO)
+         {
+             foundElement = false;
+         }
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
          return foundElement;
      }
 
-     public static boolean isDialogPresent(WebDriver driver)
+     public static boolean isDialogPresent(WebDriver driver , int seconds)
      {
          boolean foundalert = false;
 
-         WebDriverWait wait = new WebDriverWait(driver, 5);
+         WebDriverWait wait = new WebDriverWait(driver, seconds);
          try
          {
 
@@ -55,7 +75,7 @@ public class MobileAppiumFunctions {
          {
              foundalert = false;
          }
-
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
          return foundalert;
      }
 
@@ -392,6 +412,12 @@ public class MobileAppiumFunctions {
             	break;
             	
         }
+ 		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
  		
 		
 		
