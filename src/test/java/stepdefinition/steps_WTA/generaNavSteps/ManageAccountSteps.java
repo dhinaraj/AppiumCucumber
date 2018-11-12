@@ -9,6 +9,7 @@ import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
 import base.genericLib_Mob.MobProp;
 import base.genericLib_Mob.MobileAppiumFunctions;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.appium.java_client.MobileCommand;
@@ -88,7 +89,7 @@ public class ManageAccountSteps {
 			if(GlobalSettings.getMobilePlatformToRunTest().equals("IOS"))
 			{
 				//Hides Keyboard and submits for login on IOS
-			MobProp.getMobDriver().hideKeyboard();
+				MobProp.getMobDriver().hideKeyboard();
 			
 			}
 			if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
@@ -141,6 +142,12 @@ public class ManageAccountSteps {
 		}
 		
 		return serverPath;
+	}
+	
+	
+	@Given("^I configure \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\" and \"([^\"]*)\" account if it is not already configured$")
+	public void i_configure_and_account_if_it_is_not_already_configured(String arg1, String arg2, String arg3, String arg4, String arg5) throws Throwable {
+
 	}
 
 }

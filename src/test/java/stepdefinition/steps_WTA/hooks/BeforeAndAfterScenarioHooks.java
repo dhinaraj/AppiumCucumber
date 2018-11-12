@@ -12,10 +12,12 @@ import com.vimalselvam.cucumber.listener.Reporter;
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
 import base.genericLib_Mob.MobProp;
+import base.genericLib_Mob.MobileAppiumFunctions;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import hooks.TestInitializeHook;
+import io.appium.java_client.MobileCommand;
 import main.CucumberHelperTestSteps;
 import pageObjects.pageObjects_WTA.app_Pages.About_Page;
 import pageObjects.pageObjects_WTA.app_Pages.Account_Settings_Page;
@@ -88,10 +90,10 @@ public class BeforeAndAfterScenarioHooks {
 	
 	@After("@LogIn_AfterScenarioHook")
     public void LogIn_AfterScenarioHook(){
-		LogOff_In_Page.fld_UserName.sendKeys(GlobalSettings.getUserName());
-		LogOff_In_Page.fld_UserName.sendKeys(GlobalSettings.getPassword());
-		LogOff_In_Page.btn_LogOn.click();
-		
+		MobCommonFunctions.LaunchApp();
+		LogOff_In_Page.LogIn(GlobalSettings.getUserName(),GlobalSettings.getPassword());
+		MobileAppiumFunctions.waituntilElementIsVisible(MenuNav_Page.btn_HamBurgerMenu, 120);
+
     }
 	
 	@After("@TurnONInternet_AfterScenarioHook")

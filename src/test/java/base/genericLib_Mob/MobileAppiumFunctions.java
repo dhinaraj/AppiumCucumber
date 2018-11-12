@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -23,10 +24,11 @@ import io.appium.java_client.touch.offset.PointOption;
 public class MobileAppiumFunctions {
 	
 	
-	 public static boolean isElementPresent(MobileElement element)
+	 public static boolean isElementClickable(MobileElement element , int seconds)
      {
          boolean foundElement = false;
-         WebDriverWait wait = new WebDriverWait(MobProp.getMobDriver(), 3);
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), seconds);
+         WebDriverWait wait = new WebDriverWait(MobProp.getMobDriver(), seconds);
          try
          {
              wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -36,14 +38,33 @@ public class MobileAppiumFunctions {
          {
              foundElement = false;
          }
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
+         return foundElement;
+     }
+	 
+	 public static boolean isElementPresent(MobileElement element , int seconds)
+     {
+         boolean foundElement = false;
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), seconds);
+         WebDriverWait wait = new WebDriverWait(MobProp.getMobDriver(), seconds);
+         try
+         {
+             wait.until(ExpectedConditions.visibilityOf(element));
+             foundElement = true;
+         }
+         catch (WebDriverException eTO)
+         {
+             foundElement = false;
+         }
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
          return foundElement;
      }
 
-     public static boolean isDialogPresent(WebDriver driver)
+     public static boolean isDialogPresent(WebDriver driver , int seconds)
      {
          boolean foundalert = false;
 
-         WebDriverWait wait = new WebDriverWait(driver, 5);
+         WebDriverWait wait = new WebDriverWait(driver, seconds);
          try
          {
 
@@ -54,7 +75,7 @@ public class MobileAppiumFunctions {
          {
              foundalert = false;
          }
-
+         TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), GlobalSettings.getImplcitTimeOutMax());
          return foundalert;
      }
 
@@ -307,6 +328,46 @@ public class MobileAppiumFunctions {
 
 	    touchAction.tap(PointOption.point(firstElementLocation.x, firstElementLocation.y)).moveTo(PointOption.point(secondElementLocation.x, secondElementLocation.y)).release().perform();
 	}
+ 	
+ 	
+ 	@SuppressWarnings("unchecked")
+	public static void scrollToElement(MobileElement element) {
+ 		 
+ 		if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+ 		{
+ 		
+ 		int pressX = MobProp.getMobDriver().manage().window().getSize().width / 2;
+ 		int topY = MobProp.getMobDriver().manage().window().getSize().height / 8;
+ 	    
+        int bottomY = MobProp.getMobDriver().manage().window().getSize().height * 4/5;
+        
+        int i = 0;
+         
+         do{
+                     
+             scroll(pressX, bottomY, pressX, topY);
+         i++;
+         
+         } while(i <= 4);
+ 		}
+ 		if(GlobalSettings.getMobilePlatformToRunTest().equals("IOS"))
+ 		{
+ 			JavascriptExecutor js = (JavascriptExecutor) MobProp.getMobDriver();
+ 			HashMap scrollObject = new HashMap();
+ 			scrollObject.put("direction", "up");
+ 			scrollObject.put("xpath", "//XCUIElementTypeStaticText[@name='NAME']");
+ 			js.executeScript("mobile: swipe", scrollObject);
+ 		}
+     }
+ 	
+ 	private static void scroll(int fromX, int fromY, int toX, int toY) {
+        TouchAction touchAction = new TouchAction(MobProp.getMobDriver());
+        touchAction.longPress(PointOption.point(fromX, fromY))
+        .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(0)))
+        .moveTo(PointOption.point(toX, toY))
+        .release().perform();
+
+    }
 	
  	public static void horizontalSwipeByPercentages() {
 		
@@ -321,10 +382,11 @@ public class MobileAppiumFunctions {
                 .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(0)))
                 .moveTo(PointOption.point(anchor, endPoint))
                 .release().perform();
-        
-        
-
 	}
+ 	
+ 	
+ 	
+ 	
  	
  	public static void verticalSwipeByPercentages(double startPointPercent, double endPointPercent) {
  		
@@ -350,6 +412,12 @@ public class MobileAppiumFunctions {
             	break;
             	
         }
+ 		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
  		
 		
 		

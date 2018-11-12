@@ -104,6 +104,25 @@ public class EulaPage_Steps {
         }
 
 	}
+	
+	@When("^I allow camera and camera access and notifications on IOS if visible$")
+	public void i_allow_camera_and_camera_access_and_notifications_on_IOS_if_visible() throws Throwable {
+		
+		switch (GlobalSettings.getMobilePlatformToRunTest())
+        {
+            case "IOS":
+            	if(Eula_Page.isCameraPermissionOKButtonVisible())
+            	{
+        		Eula_Page.btn_AllowCameraAccess.click();
+        		Eula_Page.btn_AllowNotifications.click();
+            	}
+                break;
+            case "Android":
+                break;
+
+        }
+
+	}
 
 
 

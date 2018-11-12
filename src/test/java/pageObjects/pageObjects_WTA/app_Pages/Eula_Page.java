@@ -6,11 +6,14 @@ import io.appium.java_client.android.AndroidElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
 import base.config.GlobalSettings;
+import base.genericLib_Mob.MobProp;
+import hooks.TestInitializeHook;
 import io.appium.java_client.pagefactory.*;
 import pageObjects.pageObjects_WTA.WTAPageObject;
 import io.appium.java_client.ios.IOSElement;
 
 public class Eula_Page extends WTAPageObject {
+
 	
 	@AndroidFindBy(xpath = "//*[@resource-id='viewContainer']/android.view.View[3]/android.view.View/android.widget.Button[2]")
 	@iOSFindBy(accessibility = "Accept")
@@ -50,6 +53,26 @@ public class Eula_Page extends WTAPageObject {
                 return "";
         }
 
+    }
+    
+    
+    public boolean isCameraPermissionOKButtonVisible()
+    {
+    		boolean isButtonVisible = true;
+    		
+    		TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 3);
+    		
+    		try {
+    		btn_AllowCameraAccess.isDisplayed();
+
+    		}
+    		catch(Exception e){
+    			System.out.println("Ok button to allow camera access is not available");
+    			isButtonVisible=false;
+    		}
+    		
+    		
+    		return isButtonVisible;
     }
 	
 

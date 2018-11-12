@@ -54,7 +54,7 @@ public class AppSettings_Page extends WTAPageObject {
 	public MobileElement txt_Sync;
 
 
-	@AndroidFindBy(xpath = "//*[@resource-id='viewContainer']/android.view.View[2]/android.view.View/android.view.View[1]")
+	@AndroidFindBy(xpath = "//*[@resource-id='viewContainer']/android.view.View[2]/android.view.View/android.view.View[1]/android.view.View[1]")
 	@iOSFindBy(xpath = "Dummy")
 	public MobileElement txt_ItemsToSyncForLookupAndData;
 	

@@ -17,11 +17,11 @@ public class LogOff_In_Page extends WTAPageObject {
 	
 	MenuNav_Page MenuNav_Page = new MenuNav_Page();
 	
-	@AndroidFindBy(xpath = "//android.widget.EditText[@resource-id[contains(., 'input')]]")
+	@AndroidFindBy(xpath = "(//android.widget.EditText[@resource-id[contains(., 'input')]])[1]")
 	@iOSFindBy(xpath = "Dummy")
 	public MobileElement fld_UserName;
 
-	@AndroidFindBy(xpath = "//android.widget.EditText[@resource-id[contains(., 'input')]]")
+	@AndroidFindBy(xpath = "(//android.widget.EditText[@resource-id[contains(., 'input')]])[2]")
 	@iOSFindBy(xpath = "Dummy")
 	public MobileElement fld_Password;
 
