@@ -2,14 +2,18 @@ package stepdefinition.steps_WTA.localizationNavSteps;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openqa.selenium.remote.SessionId;
 import org.testng.Assert;
 
 import base.config.GlobalSettings;
 import base.genericLib_Mob.MobCommonFunctions;
+import base.genericLib_Mob.MobProp;
 import base.genericLib_Mob.MobileAppiumFunctions;
 import base.helpers.excelHelpers.ExcelHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import main.CucumberHelperTestSteps;
 import main.CucumberRunner;
 import pageObjects.pageObjects_WTA.app_Pages.*;
@@ -52,7 +56,33 @@ public class LocalizationTestSteps {
     SentItems_Page SentItems_Page = new SentItems_Page();
     
     FormWithInputs FormWithInputs= new FormWithInputs();
+    
+	public void initializeAllPagesForIOSTesting() {
 
+		if (GlobalSettings.getMobilePlatformToRunTest().equals("IOS")) {
+			Loc_Account_Settings_Page = new Loc_Account_Settings_Page();
+			About_Page = new About_Page();
+			Account_Settings_Page = new Account_Settings_Page();
+			ApproveWorkItemPage = new ApproveWorkItemPage();
+			AppSettings_Page = new AppSettings_Page();
+			Dashboard_Page = new Dashboard_Page();
+			DemoFillForm_Page = new DemoFillForm_Page();
+			Dialogs_Page = new Dialogs_Page();
+			Drafts_Page = new Drafts_Page();
+			Eula_Page = new Eula_Page();
+			FillForm_Page = new FillForm_Page();
+			Inbox_Page = new Inbox_Page();
+			InformationWorkItemPage = new InformationWorkItemPage();
+			InitialLoadingPage = new InitialLoadingPage();
+			LogOff_In_Page = new LogOff_In_Page();
+			MenuNav_Page = new MenuNav_Page();
+			Outbox_Page = new Outbox_Page();
+			OverFlowIcon_Page = new OverFlowIcon_Page();
+			SentItems_Page = new SentItems_Page();
+
+			FormWithInputs = new FormWithInputs();
+		}
+	}
     
     @Then("^Validate the Localization key on Account Settings Page for '(.*)', '(.*)','(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'$")
     public void GivenThernValidateTheLocalizationKeyOnAccountSettingsPageFor(String DemoMode, String ServerPath, String Repository, String Provider, String UserName, String Password, String ShowPassword, String Logon) throws Throwable
@@ -72,6 +102,7 @@ public class LocalizationTestSteps {
         
         for ( String key : DemoModeDic.keySet() ) {
         	
+
         	String Language = key;
         	String[] LangCodeAndCountry = Language.split("-");
         	DemoModeDic.get(Language);
@@ -92,25 +123,31 @@ public class LocalizationTestSteps {
             
             
             //Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
+           
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+
             MobileAppiumFunctions.waituntilElementExists(Loc_Account_Settings_Page.Txt_ServerPathXpath(), 20);
 
+            
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
-            ActualTranslatedStrings.put(DemoMode + "TranslatedString", Loc_Account_Settings_Page.switch_DemoMode.getText());
-            ActualTranslatedStrings.put(ServerPath + "TranslatedString", Loc_Account_Settings_Page.txt_ServerPath.get(0).getText());
-            ActualTranslatedStrings.put(Repository + "TranslatedString", Loc_Account_Settings_Page.dropdown_Repository.get(0).getText());
-            ActualTranslatedStrings.put(Provider + "TranslatedString", Loc_Account_Settings_Page.dropdown_Provider.get(1).getText());
-            ActualTranslatedStrings.put(UserName + "TranslatedString", Loc_Account_Settings_Page.txt_Username.get(1).getText());
-            ActualTranslatedStrings.put(Password + "TranslatedString", Loc_Account_Settings_Page.txt_Password.get(2).getText());
-            ActualTranslatedStrings.put(ShowPassword + "TranslatedString", Loc_Account_Settings_Page.chk_ShowPassword.getText());
+            ActualTranslatedStrings.put(DemoMode + "TranslatedString", Loc_Account_Settings_Page.switch_DemoMode.getAttribute("name"));
+            ActualTranslatedStrings.put(ServerPath + "TranslatedString", Loc_Account_Settings_Page.txt_ServerPath.getText());
+            ActualTranslatedStrings.put(Repository + "TranslatedString", Loc_Account_Settings_Page.dropdown_Repository.getText());
+            ActualTranslatedStrings.put(Provider + "TranslatedString", Loc_Account_Settings_Page.dropdown_Provider.getText());
+            ActualTranslatedStrings.put(UserName + "TranslatedString", Loc_Account_Settings_Page.txt_Username.getText());
+            ActualTranslatedStrings.put(Password + "TranslatedString", Loc_Account_Settings_Page.txt_Password.getText());
+            ActualTranslatedStrings.put(ShowPassword + "TranslatedString", Loc_Account_Settings_Page.chk_ShowPassword.getAttribute("name"));
             ActualTranslatedStrings.put(Logon + "TranslatedString", Loc_Account_Settings_Page.btn_LogOn.getText());
             
-            MobCommonFunctions.CloseApp();
+            //MobCommonFunctions.CloseApp();
             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
-        }
+        	}
+
             Assert.assertEquals(OverAllTestResult, true, "Test Failed as some expected Strings were not matching, please check report");
 
     }
@@ -148,10 +185,15 @@ public class LocalizationTestSteps {
             ExpectedTranslatedStrings.put(ShowPassword + "TranslatedString", ShowPasswordDic.get(Language));
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
+            
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
@@ -165,7 +207,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Password + "TranslatedString", Loc_Account_Settings_Page.txt_Selected_Password.getText());
             ActualTranslatedStrings.put(ShowPassword + "TranslatedString", Loc_Account_Settings_Page.chk_ShowPassword.getText());
 
-            MobCommonFunctions.CloseApp();
+            //MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         }
@@ -216,10 +258,14 @@ public class LocalizationTestSteps {
             ExpectedTranslatedStrings.put(LogOff + "TranslatedString", LogOffDic.get(Language));
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
 
@@ -275,10 +321,14 @@ public class LocalizationTestSteps {
             ExpectedTranslatedStrings.put(InvokeFormItem + "TranslatedString", InvokeFormItemDic.get(Language));
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.btn_Inbox_Dropdown.click();
             
@@ -291,7 +341,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(InvokeFormItem + "TranslatedString", MenuNav_Page.btn_InvokeForm.getText());
 
 
-            MobCommonFunctions.CloseApp();
+            
    
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -337,10 +387,14 @@ public class LocalizationTestSteps {
             ExpectedTranslatedStrings.put(ContactUs + "TranslatedString", ContactUsDic.get(Language));
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
@@ -360,7 +414,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(ViewOnline + "TranslatedString", About_Page.txt_ViewOnline.getText());
             ActualTranslatedStrings.put(TechnicalSupport + "TranslatedString", About_Page.txt_TechinicalSupport.getText());
             ActualTranslatedStrings.put(ContactUs + "TranslatedString", About_Page.txt_Contact.getText());
-            MobCommonFunctions.CloseApp();
+            
 
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -398,10 +452,14 @@ public class LocalizationTestSteps {
             ExpectedTranslatedStrings.put(About + "TranslatedString", AboutDic.get(Language));
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+             
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
@@ -416,7 +474,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Help + "TranslatedString", OverFlowIcon_Page.btn_OverFlowHelp.getText());
             ActualTranslatedStrings.put(About + "TranslatedString", OverFlowIcon_Page.btn_OverFlowAbout.getText());
 
-            MobCommonFunctions.CloseApp();
+            //MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -456,10 +514,14 @@ public class LocalizationTestSteps {
             ExpectedTranslatedStrings.put(Cancel + "TranslatedString", CancelDic.get(Language));
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AccountSettings.click();
@@ -477,7 +539,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(OK + "TranslatedString", Dialogs_Page.btn_DialogOK.getText());
             ActualTranslatedStrings.put(Cancel + "TranslatedString", Dialogs_Page.btn_Cancel.getText());
 
-            MobCommonFunctions.CloseApp();
+            //MobCommonFunctions.CloseApp();
 
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -530,10 +592,14 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_AppSettings.click();
@@ -565,7 +631,7 @@ public class LocalizationTestSteps {
 
             ActualTranslatedStrings.put(SyncText + "TranslatedString", AppSettings_Page.txt_Sync.getText());
             ActualTranslatedStrings.put(ItemsToSyncDataAndLookUp + "TranslatedString", AppSettings_Page.txt_ItemsToSyncForLookupAndData.getText());
-            MobCommonFunctions.CloseApp();
+            //MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -611,10 +677,13 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
             Account_Settings_Page.TurnONDemoMode();
             sleep(1000);
             Inbox_Page.NavigateToWorkItemFilter("Approval");
@@ -650,7 +719,7 @@ public class LocalizationTestSteps {
             Dialogs_Page.btn_DialogOK.click();
             ActualTranslatedStrings.put(RejectSuccessMessage + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
      
    
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -690,10 +759,13 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
             Account_Settings_Page.TurnONDemoMode();
             sleep(1000);
 
@@ -710,7 +782,7 @@ public class LocalizationTestSteps {
             MobileAppiumFunctions.waituntilElementclickable(InformationWorkItemPage.btn_Remove);
 
             ActualTranslatedStrings.put(Remove + "TranslatedString", InformationWorkItemPage.btn_Remove.getText());
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
 
             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -750,10 +822,13 @@ public class LocalizationTestSteps {
             ExpectedTranslatedStrings.put(SentItems_List_NoItemsAvailable + "TranslatedString", SentItems_List_NoItemsAvailableDic.get(Language));
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
             Account_Settings_Page.TurnONDemoMode();
             
 
@@ -777,7 +852,7 @@ public class LocalizationTestSteps {
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_SentItems.click();
             ActualTranslatedStrings.put(SentItems_List_NoItemsAvailable + "TranslatedString", SentItems_Page.txt_NoItemsAvailable.getText());
-            MobCommonFunctions.CloseApp();
+            //MobCommonFunctions.CloseApp();
 
             
             OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -813,10 +888,13 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_FillForm.click();
@@ -837,7 +915,7 @@ public class LocalizationTestSteps {
 
             ActualTranslatedStrings.put(FillForm_Submission_Success + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
 
-            MobCommonFunctions.CloseApp();
+            //MobCommonFunctions.CloseApp();
    
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -864,6 +942,7 @@ public class LocalizationTestSteps {
         
 
         MobCommonFunctions.LaunchApp();
+        
         MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
         MenuNav_Page.clickOnHamBurgerMenu();
         MenuNav_Page.btn_FillForm.click();
@@ -897,10 +976,13 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Drafts.click();
@@ -920,7 +1002,7 @@ public class LocalizationTestSteps {
             OverFlowIcon_Page.btn_OverFlowDeleteItems.click();
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -975,10 +1057,13 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
+            
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_SentItems.click();
@@ -999,7 +1084,7 @@ public class LocalizationTestSteps {
             OverFlowIcon_Page.btn_OverFlowDeleteItems.click();
             ActualTranslatedStrings.put(DeleteSelectedItems + "TranslatedString", Dialogs_Page.text_DialogTitle.getText());
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         	}
@@ -1082,10 +1167,12 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);            
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
 
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_Outbox.click();
@@ -1112,7 +1199,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(DeleteSelectedItems_ConfirmMessage + "TranslatedString", Dialogs_Page.text_DialogError.getText());
 
             Dialogs_Page.btn_Cancel.click();
-            MobCommonFunctions.CloseApp();
+           //MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         	
@@ -1156,10 +1243,12 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);            
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MenuNav_Page.clickOnHamBurgerMenu();
             MenuNav_Page.btn_FillForm.click();
@@ -1193,7 +1282,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(LoadMore + "TranslatedString", Inbox_Page.btn_LoadMore.getText());
            
 
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
@@ -1239,10 +1328,12 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);            
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
             MobileAppiumFunctions.waituntilElementclickable(LogOff_In_Page.fld_UserName);
 
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
@@ -1257,7 +1348,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(ModalDialog_TitleError + "TranslatedString", LogOff_In_Page.text_LoginPage_DialogTitle.getText());
 
 
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
@@ -1294,10 +1385,12 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);            
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
             MenuNav_Page.waitUnitlHamburgerMenuIsClickable();
             MobCommonFunctions.SwitchToOfflineMode();
             Dialogs_Page.WaitUnitlNetworkConnectionNotAvailableMessageAppears();
@@ -1331,7 +1424,7 @@ public class LocalizationTestSteps {
             Outbox_Page.OpenFirstFormFromOutbox();
             sleep(500);
             ActualTranslatedStrings.put(Error_Outbox_CannotViewIfAccountOnline + "TranslatedString", Dialogs_Page.txt_ConfirmationMessgageInFooter.getText());
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
 
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
         	}
@@ -1371,10 +1464,12 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);            
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
             sleep(1000);
             MobileAppiumFunctions.waituntilElementExists(Loc_Account_Settings_Page.Txt_ServerPathXpath(), 20);
 
@@ -1405,7 +1500,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Error_130 + "TranslatedString", LogOff_In_Page.text_LoginPage_DialogError.getText());
             LogOff_In_Page.btn_Login_Page_DialogOK.click();
 
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
 
   
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
@@ -1430,6 +1525,17 @@ public class LocalizationTestSteps {
 
         boolean OverAllTestResult = true;
         MobCommonFunctions.clearAppData();
+        
+        switch (GlobalSettings.getMobilePlatformToRunTest())
+        {
+            case "IOS":
+        		Eula_Page.btn_AllowCameraAccess.click();
+        		Eula_Page.btn_AllowNotifications.click();
+                break;
+            case "Android":
+                break;
+
+        }
 
         for ( String key : Eula_AcceptDic.keySet() ) {
         	String Language = key;
@@ -1445,10 +1551,12 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);            
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
 
 
             Map<String, String> ActualTranslatedStrings = new HashMap<String, String>();
@@ -1456,7 +1564,7 @@ public class LocalizationTestSteps {
             ActualTranslatedStrings.put(Eula_Accept + "TranslatedString", Eula_Page.btn_Eula_Accept.getText());
             ActualTranslatedStrings.put(Eula_Cancel + "TranslatedString", Eula_Page.btn_Eula_Cancel.getText());
 
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
         }
@@ -1495,10 +1603,12 @@ public class LocalizationTestSteps {
 
 
             // Change Device Language
-            MobCommonFunctions.changeDeviceLanguage(LangCodeAndCountry[0], LangCodeAndCountry[1]);
-
+            ChangeLanguageAndInitializeAllPages(LangCodeAndCountry[0], LangCodeAndCountry[1]);            
             //Navigate to the Page and Verify
+            if(GlobalSettings.getMobilePlatformToRunTest().equals("Android"))
+            {
             MobCommonFunctions.LaunchApp();
+            }
 
             Account_Settings_Page.newAccountSetUpEnterAllDetailsWithoutClickingONLogin(GlobalSettings.getWebAppUrl(), "SearchFeature", GlobalSettings.getUserName(), GlobalSettings.getPassword());
             Account_Settings_Page.btn_LogOn.click();
@@ -1514,7 +1624,7 @@ public class LocalizationTestSteps {
 
             //ActualTranslatedStrings.put(Error_141 + "TranslatedString", Account_Settings_Page.txt_AlertDialog_Msg.getText());
 
-             MobCommonFunctions.CloseApp();
+             //MobCommonFunctions.CloseApp();
    
              OverAllTestResult = compareExpectedAndActualStrings(OverAllTestResult, ExpectedTranslatedStrings, ActualTranslatedStrings, Language, writer , fileName );
 
@@ -1591,6 +1701,16 @@ public class LocalizationTestSteps {
     	PrintWriter writer = new PrintWriter(destinationPath , "UTF-8");
 
     	return writer;
+    }
+    
+    public void ChangeLanguageAndInitializeAllPages(String language, String Country)
+    {
+    	
+    	MobCommonFunctions.changeDeviceLanguage(language, Country);
+    	
+    	
+    	//Since the Driver is recreated for IOS when device language is changed, all pages must be re-initialized with the new driver instance for IOS
+    	initializeAllPagesForIOSTesting();
     }
     
 

@@ -32,53 +32,31 @@ public class MobCommonFunctions {
 	
 	
 
-	public void changeDeviceLanguage(String Language, String Country) {
+	public void changeDeviceLanguage(String language, String country) {
 		
 
 
 		if (GlobalSettings.getMobilePlatformToRunTest().equals("IOS")) {
 			
-			SettingsPage SettingsPage = new SettingsPage();
-			MenuNav_Page MenuNavPage = new MenuNav_Page();
-			
-			DesiredCapabilities IOSCapabilities = new DesiredCapabilities();
-
-			IOSCapabilities.setCapability("automationName", "XCUITest");
-			IOSCapabilities.setCapability("platformName", "iOS");
-			IOSCapabilities.setCapability("platformVersion", "11.4.1");
-			IOSCapabilities.setCapability("deviceName", "Auron's iPhone");
-			IOSCapabilities.setCapability("udid", "32798c6c811f74f62ac6e73c24258f7286484ee2");
-			IOSCapabilities.setCapability("noReset", "true");
-			// IOSCapabilities.setCapability("bundleId",
-			// "com.schneiderelectric.worktaskspro");
-			IOSCapabilities.setCapability("app", "Settings");
-			IOSCapabilities.setCapability("clearSystemFiles", true);
-
-			IOSCapabilities.setCapability("ignoreUnimportantViews", "true");
-			IOSCapabilities.setCapability("newCommandTimeout", "300");
-			IOSCapabilities.setCapability("report.disable", true);
-			IOSCapabilities.setCapability("maxTypingFrequency ", 30);
-			try {
-				newAppiumDriver = (new IOSDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"),
-						IOSCapabilities));
-			} catch (Exception e) {
-
-				System.out.printf("%s", e.getMessage());
-				System.out.printf("%s", e.getStackTrace().toString());
-				System.out.printf("Mobile Driver Could not be intitialized");
+			if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
+			{
+			if (MobProp.getMobDriver().getSessionId() != null) {
+				TestInitializeHook.quitDriver(MobProp.getMobDriver());
+	        }
 			}
 
-			PageFactory.initElements(new AppiumFieldDecorator(newAppiumDriver), SettingsPage);
 
-			SettingsPage.btn_GeneralSettings.click();
-			SettingsPage.btn_LanguageAndRegion.click();
-			SettingsPage.btn_Language.click();
-			newAppiumDriver.quit();
-		}
+			
+			initializeDriver(3, language, country);
+			
+			
+			}
 		if (GlobalSettings.getMobilePlatformToRunTest().equals("Android")) {
 			RunCmdCommand("adb shell am start -n net.sanapeli.adbchangelanguage/.AdbChangeLanguage -e language "
-					+ Language + "  -e country " + Country);
+					+ language + "  -e country " + country);
 		}
+		
+		
 
 	}
 
@@ -226,9 +204,40 @@ public class MobCommonFunctions {
         }
     }
     
-    
-    
-    
+
+	public boolean initializeDriver(int retryCount, String language, String country)
+	{
+
+		boolean isDriverInitialized = false;
+		for (int i = 0; i <= retryCount; i++) {
+
+			try {
+				System.out.println("Driver intializaion Attempt :  " + i);
+				
+				TestInitializeHook.InitializeMobileDriver(language, country);
+				if(MobProp.getMobDriver().getSessionId()!=null)
+				{
+					isDriverInitialized = true;
+				}
+
+			} catch (Exception e) {
+				System.out.println("Driver intializaion failed");
+				e.printStackTrace();
+			}
+			
+			if(isDriverInitialized)
+			{
+				System.out.println("Driver intializaion Attempt :  " + i + "Sucessful");
+				break;
+			}
+			else
+			{
+				System.out.println("Driver intializaion Attempt :  " + i + "Failed");
+			}
+		}
+
+		return isDriverInitialized;
+	}
 
 
 }

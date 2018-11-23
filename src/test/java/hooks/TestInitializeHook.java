@@ -1,6 +1,7 @@
 package hooks;
 
 import java.net.URL;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
@@ -58,13 +59,16 @@ public class TestInitializeHook {
 
     }
 
-    public static void InitializeMobileDriver()
+    public static void InitializeMobileDriver(String language, String country)
     {
+    	if(MobProp.getMobDriver()==null)
+    	{
+    		StartMobileAppAppium(language, country);
+    	}
     	
-    	
-    	if (MobProp.getMobDriver() == null)
+    	else if (MobProp.getMobDriver().getSessionId()==null)
         {
-            StartMobileAppAppium();
+            StartMobileAppAppium(language, country);
         }
 
     }
@@ -117,7 +121,7 @@ public class TestInitializeHook {
         try
         {
             driver.quit();
-            System.out.printf("Driver was quit sucessfully");
+            System.out.println("Driver was quit sucessfully");
         }
         catch (NullPointerException e)
         {
@@ -324,7 +328,7 @@ public class TestInitializeHook {
 
     //Mobile App Intializers Appium
 
-    public static void StartMobileAppAppium()
+    public static void StartMobileAppAppium(String language, String Country)
     {
 
 
@@ -385,17 +389,21 @@ public class TestInitializeHook {
                 //IOSCapabilities.setCapability("fullReset", true);
                 IOSCapabilities.setCapability("newCommandTimeout", 300);
                 //IOSCapabilities.setCapability("report.disable", true);
-                IOSCapabilities.setCapability("maxTypingFrequency ", 30);
-                //IOSCapabilities.setCapability("language", "de");
-                //IOSCapabilities.setCapability("locales", "de_DE");
+                IOSCapabilities.setCapability("maxTypingFrequency", 30);
+                IOSCapabilities.setCapability("language", language);
+                IOSCapabilities.setCapability("locale",  language + "_" + Country);
                 IOSCapabilities.setCapability("app", GlobalSettings.getIOSMobileAppPath());
+                IOSCapabilities.setCapability("startIWDP", true);
                 //IOSCapabilities.setCapability("simpleIsVisibleCheck", true);
                 //IOSCapabilities.setCapability("sendKeyStrategy", "setValue");
-                
+
                 try
                 {
                     MobProp.setMobDriver(new IOSDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), IOSCapabilities));
-                }
+                    
+                    //Set<String> contexts = MobProp.getMobDriver().getContextHandles();
+                    
+                 }
                 catch (Exception e)
                 {
 

@@ -17,7 +17,9 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import hooks.TestInitializeHook;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileCommand;
+import io.appium.java_client.MobileElement;
 import main.CucumberHelperTestSteps;
 import pageObjects.pageObjects_WTA.app_Pages.About_Page;
 import pageObjects.pageObjects_WTA.app_Pages.Account_Settings_Page;
@@ -148,8 +150,10 @@ public class BeforeAndAfterScenarioHooks {
 		//if (scenario.isFailed()) {
 			String screenshotName = scenario.getName().replaceAll("\\s", "_");
 			try {
+				
+				AppiumDriver<MobileElement>  driver = MobProp.getMobDriver();
 				//This takes a screenshot from the driver at save it to the specified location
-				File sourcePath =  ((TakesScreenshot) MobProp.getMobDriver()).getScreenshotAs(OutputType.FILE);
+				File sourcePath =  ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 				
 				//Building up the destination path for the screenshot to save
 				//Also make sure to create a folder 'screenshots' with in the cucumber-report folder

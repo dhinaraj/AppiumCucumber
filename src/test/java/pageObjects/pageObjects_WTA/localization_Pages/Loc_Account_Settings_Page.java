@@ -16,37 +16,37 @@ import io.appium.java_client.ios.IOSElement;
 
 public class Loc_Account_Settings_Page extends WTAPageObject {
 	
-	@AndroidFindBy(xpath = "//*[@class='android.widget.CheckBox' and ./following-sibling::*[@class='android.view.View']]")
-	@iOSFindBy(xpath = "//XCUIElementTypeSwitch[text()='DemoMode']")
+	@AndroidFindBy(xpath = "//android.view.View[@resource-id='configuration']/android.view.View[2]/android.widget.CheckBox")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeSwitch[1]")
 	public MobileElement switch_DemoMode;
 
-	@AndroidFindBy(xpath = "//*[@text and @class='android.view.View' and ./following-sibling::*[@resource-id[contains(.,'input_')]]]")
-	@iOSFindBy(xpath = "//*[@id='Server Path']/following-sibling::XCUIElementTypeTextField[1]")
-	public List<MobileElement> txt_ServerPath;
+	@AndroidFindBy(xpath = "//android.view.View[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[1]/android.view.View[1]")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther[1]/XCUIElementTypeStaticText")
+	public MobileElement txt_ServerPath;
 
-	@AndroidFindBy(xpath = "//*[@text and @class='android.view.View' and ./parent::*[@resource-id[contains(.,'select_value_label_')]]]")
-	@iOSFindBy(xpath = "//XCUIElementTypeOther[contains(., 'Repository') and following::XCUIElementTypeOther[text()='Provider'] and preceding::XCUIElementTypeOther[contains(., 'Repository')]]")
-	public List<MobileElement> dropdown_Repository;
+	@AndroidFindBy(xpath = "(//android.view.View[@resource-id[contains(.,'select_value_label')]])[1]/android.view.View")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther[4]/XCUIElementTypeOther/XCUIElementTypeStaticText")
+	public MobileElement dropdown_Repository;
 
-	@AndroidFindBy(xpath = "//*[@text and @class='android.view.View' and ./parent::*[@resource-id[contains(.,'select_value_label_')]]]")
-	@iOSFindBy(xpath = "//XCUIElementTypeOther[contains(., 'Repository') and following::XCUIElementTypeOther[text()='Provider'] and preceding::XCUIElementTypeOther[contains(., 'Repository')]]")
-	public List<MobileElement> dropdown_Provider;
+	@AndroidFindBy(xpath = "(//android.view.View[@resource-id[contains(.,'select_value_label')]])[2]/android.view.View")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther[6]/XCUIElementTypeOther/XCUIElementTypeStaticText")
+	public MobileElement dropdown_Provider;
 
 
-	@AndroidFindBy(xpath = "//*[@text and @class='android.view.View' and ./following-sibling::*[@resource-id[contains(.,'input_')]]]")
-	@iOSFindBy(xpath = "xpath=(//XCUIElementTypeTextField)[2]")
-	public List<MobileElement> txt_Username;
+	@AndroidFindBy(xpath = "//android.view.View[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[4]/android.view.View[1]")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther[7]/XCUIElementTypeStaticText")
+	public MobileElement txt_Username;
 
-	@AndroidFindBy(xpath = "//*[@text and @class='android.view.View' and ./following-sibling::*[@resource-id[contains(.,'input_')]]]")
-	@iOSFindBy(xpath = "//XCUIElementTypeOther[text()= 'Password']/following-sibling::XCUIElementTypeSecureTextField[1]")
-	public List<MobileElement> txt_Password;
+	@AndroidFindBy(xpath = "//android.view.View[@resource-id='configuration']/android.view.View[2]/android.view.View/android.view.View[5]/android.view.View[1]")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther[9]/XCUIElementTypeStaticText")
+	public MobileElement txt_Password;
 
-	@AndroidFindBy(xpath = "//*[@class='android.widget.CheckBox' and ./preceding-sibling::*[@class='android.view.View']]")
-	@iOSFindBy(xpath = "//XCUIElementTypeSwitch[text()= 'ShowPassword']")
+	@AndroidFindBy(xpath = "//android.view.View[@resource-id='configuration']/android.view.View[2]/android.view.View/android.widget.CheckBox")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeSwitch")
 	public MobileElement chk_ShowPassword;
 
-	@AndroidFindBy(xpath = "(//*[@resource-id='configuration']/*/*/*[@class='android.widget.Button'])[4]")
-	@iOSFindBy(id = "LogOn")
+	@AndroidFindBy(xpath = "//android.view.View[@resource-id='configuration']/android.view.View[3]/android.view.View/android.widget.Button")
+	@iOSFindBy(xpath = "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeButton")
 	public MobileElement btn_LogOn;
 
 
@@ -78,9 +78,10 @@ public class Loc_Account_Settings_Page extends WTAPageObject {
             case "Windows":
                 return "//*[@Name='Server Path']";
             case "IOS":
-                return "//*[@id='Server Path']/following-sibling::XCUIElementTypeTextField[1]";
+                //return "//XCUIElementTypeOther[@name='main']/XCUIElementTypeOther[1]/XCUIElementTypeStaticText";
+            	return "(//XCUIElementTypeOther[@name='Work Tasks Pro'])[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther[1]/XCUIElementTypeStaticText";
             case "Android":
-                return "//*[@resource-id[contains(.,'input_')]]";
+                return "/android.view.View[@resource-id='configuration']/android.view.View[2]/android.widget.CheckBox";
             default:
                 return "";
         }

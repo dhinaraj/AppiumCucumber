@@ -12,7 +12,7 @@ Scenario: BeforeFeatureSteps
 	And I click on Accept on EULA
 
 	
-@ReadyForBuild @Android @Localization
+@ReadyForBuild @Android @Localization @TestingNow
 Scenario: Validate the Localization key on Account Settings Page_FirstTimeConfiguration
 	Then Validate the Localization key on Account Settings Page for 'Demo Mode', 'Server Path','Repository', 'Provider', 'User Name', 'Password', 'Show Password', 'Logon'
 

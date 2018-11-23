@@ -33,7 +33,8 @@ import hooks.TestInitializeHook;
 		//dryRun=true)
 		//tags={"@ReadyForBuild"})
 		//tags={"@ReadyForBuild" , "@IOS"})
-		tags={"@TestingNow"})
+		//tags={"@TestingNow"})
+		tags={"@Localization" , "@TestingNow"})
 
 public class CucumberRunner extends AbstractTestNGCucumberTests {
 	
@@ -128,7 +129,7 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 
 	TestInitializeHook mainHook = new TestInitializeHook();
 	
-	public boolean initializeDriver(int retryCount)
+	public boolean initializeDriver(int retryCount, String language, String country)
 	{
 
 		boolean isDriverInitialized = false;
@@ -137,8 +138,8 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 			try {
 				System.out.println("Driver intializaion Attempt :  " + i);
 				
-				TestInitializeHook.InitializeMobileDriver();
-				if(MobProp.getMobDriver()!=null)
+				TestInitializeHook.InitializeMobileDriver(language, country);
+				if(MobProp.getMobDriver().getSessionId()!=null)
 				{
 					isDriverInitialized = true;
 				}
@@ -195,7 +196,7 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
 		{
 
-				boolean isDriverInitialized = initializeDriver(3);
+				boolean isDriverInitialized = initializeDriver(3, "en", "US");
 				if(isDriverInitialized)
 				{
 				TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
@@ -215,19 +216,22 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 
 		if (GlobalSettings.getGenrateStepsSkeleton().equals("false")) {
 			
-			if (MobProp.getMobDriver() == null) {
-				boolean isDriverInitialized = initializeDriver(3);
+			if (MobProp.getMobDriver().getSessionId() == null) {
+				boolean isDriverInitialized = initializeDriver(3, "en", "US");
 				if (isDriverInitialized) {
 					TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
 				}
-			} else if (MobProp.getMobDriver().getSessionId() == null) {
+			} 
+			
+			/*else if (MobProp.getMobDriver().getSessionId() == null) {
 				TestInitializeHook.quitDriver(MobProp.getMobDriver());
-				boolean isDriverInitialized = initializeDriver(3);
+				boolean isDriverInitialized = initializeDriver(3, "en", "US");
 				if (isDriverInitialized) {
 					TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
 				}
 
-			}
+			}*/
+			
 			TestInitializeHook.setImplicitTimeout(MobProp.getMobDriver(), 15);
 		}
 
@@ -238,7 +242,7 @@ public class CucumberRunner extends AbstractTestNGCucumberTests {
 	public void quitMobileAppAndtakeScreenshot() throws IOException {
 		if(GlobalSettings.getGenrateStepsSkeleton().equals("false"))
 		{
-		if (MobProp.getMobDriver() != null) {
+		if (MobProp.getMobDriver().getSessionId()!= null) {
 		TestInitializeHook.quitDriver(MobProp.getMobDriver());
         }
 		}
